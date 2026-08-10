@@ -2,9 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "backend src code",
-  "main": "index.js",
+  "main": "server.ts",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev_start": "node --env-file=.env database/connection.ts"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +24,13 @@
     "typescript-eslint": "^8.66.0"
   },
   "dependencies": {
-    "jsonwebtoken": "^9.0.3"
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.5.0",
+    "mongoose": "^9.9.1",
+    "morgan": "^1.11.0"
   }
 }
