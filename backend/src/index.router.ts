@@ -1,8 +1,7 @@
-import{Router, type Express, type Request, type Response, type NextFunction } from 'express';
+import{Router, type Request, type Response, type NextFunction } from 'express';
 
 
 
-import { testing } from '@fullstack-lab/utils';
 
 export const router = Router()
 

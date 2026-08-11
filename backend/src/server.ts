@@ -1,5 +1,3 @@
-// just for testing the utils import
-import { testing } from "@fullstack-lab/utils";
 import { app } from './app.js'
 import * as http from "node:http";
 

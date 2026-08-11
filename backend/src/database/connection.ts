@@ -1,6 +1,5 @@
 import {Db, MongoClient, ServerApiVersion} from "mongodb";
 
-// @ts-ignore
 const uri: string = process.env.dev_DB_URL || "";
 if (!uri) {
     throw new Error(`DB_URL is not defined in .env`);
@@ -26,9 +25,6 @@ async function ping(): Promise<void> {
     }
 }
 
-// console.log(uri)
-// console.log(client)
-// await ping()
 
 let connection: Db | null = null;
 async function initConnection(): Promise<Db> {
@@ -51,6 +47,7 @@ async function closeConnection() {
 
 const db = {
     getConnection: initConnection(),
-    closeConnection: closeConnection()
+    closeConnection: closeConnection(),
+    ping: ping()
 }
 export default db;

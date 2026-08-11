@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node --env-file=.env dist/server.js",
-    "dev": "tsx --env-file=.env src/server.ts"
+    "dev": "tsx --env-file=.env src/server.ts",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^26.2.0",
     "eslint": "^10.8.1",
+    "globals": "^17.9.0",
     "nodemon": "^3.1.14",
     "tsx": "^4.23.12",
     "typescript": "^6.0.3",
