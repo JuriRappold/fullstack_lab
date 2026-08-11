@@ -1,12 +1,15 @@
 {
-  "name": "backend",
+  "name": "@fullstack-lab/backend",
   "version": "1.0.0",
+  "private": true,
   "description": "backend src code",
-  "main": "server.ts",
+  "main": "./dist/server.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev_start": "node --env-file=.env database/connection.ts"
+    "dev_start": "node --env-file=.env src/server.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +24,8 @@
     "eslint": "^10.8.1",
     "nodemon": "^3.1.14",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.66.0"
+    "typescript-eslint": "^8.66.0",
+    "@fullstack-lab/utils": "file:../utils"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

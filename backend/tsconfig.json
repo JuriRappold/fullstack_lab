@@ -24,7 +24,7 @@
 //    }
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "es2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
 
@@ -38,7 +38,7 @@
 
     "sourceMap": true,
 
-    "allowImportingTsExtensions": true,
+//    "allowImportingTsExtensions": true,
     "noImplicitAny": true
   },
   "include": [
