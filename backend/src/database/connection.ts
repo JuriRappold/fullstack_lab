@@ -45,9 +45,9 @@ async function closeConnection() {
     }
 }
 
-const db = {
+export const db = {
     getConnection: initConnection(),
     closeConnection: closeConnection(),
     ping: ping()
 }
-export default db;
+// export default db;
