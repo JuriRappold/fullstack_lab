@@ -1,17 +1,22 @@
 {
-  "name": "backend",
+  "name": "@fullstack-lab/backend",
   "version": "1.0.0",
+  "private": true,
   "description": "backend src code",
-  "main": "server.ts",
+  "main": "./dist/server.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev_start": "node --env-file=.env database/connection.ts"
+    "build": "tsc",
+    "start": "node --env-file=.env dist/server.js",
+    "dev": "tsx --env-file=.env src/server.ts",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@fullstack-lab/utils": "file:../utils",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.19.0",
@@ -19,7 +24,9 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^26.2.0",
     "eslint": "^10.8.1",
+    "globals": "^17.9.0",
     "nodemon": "^3.1.14",
+    "tsx": "^4.23.12",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.66.0"
   },
