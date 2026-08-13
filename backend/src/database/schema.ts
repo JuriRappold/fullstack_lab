@@ -1,4 +1,5 @@
-import { Schema, InferSchemaType, createConnection } from 'mongoose';
+import {Schema, InferSchemaType, createConnection, HydratedDocument} from 'mongoose';
+import {ObjectId} from "mongodb";
 
 // Connection
 const uri: string = process.env.dev_DB_URL || "";
@@ -101,12 +102,23 @@ export const updateSchema = new Schema({
 })
 
 // MODELS
-export const User = connection.model('User', userSchema);
-export const Project = connection.model('Project', projectSchema);
-export const Update = connection.model('Update', updateSchema);
+export const UserModel = connection.model('User', userSchema);
+export const ProjectModel = connection.model('Project', projectSchema);
+export const UpdateModel = connection.model('Update', updateSchema);
 
 
 // INFERRED TYPES
-export type USER = InferSchemaType<typeof userSchema>;
-export type PROJECT = InferSchemaType<typeof projectSchema>;
-export type UPDATE = InferSchemaType<typeof updateSchema>;
+export type UserData = InferSchemaType<typeof userSchema>;
+export type UserDocument = HydratedDocument< UserData >;
+
+export type ProjectData = InferSchemaType<typeof projectSchema>;
+export type ProjectDocument = HydratedDocument< ProjectData >;
+
+
+
+
+
+export type UpdateData = InferSchemaType<typeof updateSchema>;
+export type UpdateDocument = HydratedDocument< UpdateData >;
+
+export type OBJECT_ID = Schema.Types.ObjectId

@@ -7,6 +7,7 @@ import session from 'express-session';
 // files
 import { sessionOptions } from "./middleware/sessionOptions.js";
 import { router } from "./index.router.js";
+import {errorHandler} from './middleware/errorHandler.js'
 
 // code
 export const app = express();
@@ -28,3 +29,4 @@ app.use(logger('dev', {immediate: true}))
 app.use('', router)
 
 // Error Handling
+app.use(errorHandler);

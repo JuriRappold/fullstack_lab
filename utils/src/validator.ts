@@ -1,0 +1,1 @@
+export const isUUID = /^[a-f\d]{24}$/i;
