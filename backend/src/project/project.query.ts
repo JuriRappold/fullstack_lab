@@ -36,12 +36,12 @@ async function newProject(newProject: projectDTO): Promise<ProjectDocument> {
 - returns 200
 - returns 400 if invalid id
  */
-async function projectById(projectId: string): Promise<ProjectDocument | null> {
-    return ProjectModel.findById(projectId);
+async function projectById(projectId: string, userId: string): Promise<ProjectDocument | null> {
+    return await checkProjectOwnerShip(projectId, userId)
 }
 
 async function projectsFrom(userId: string): Promise< ProjectDocument[] > {
-    return ProjectModel.find({owner: userId});
+    return ProjectModel.find({owner_id: userId});
 }
 /*
 **UPDATE**
@@ -51,12 +51,14 @@ async function projectsFrom(userId: string): Promise< ProjectDocument[] > {
 	- returns 400 if no/insufficient req. body
 	- returns 400 if invalid id
  */
-async function updateProject(projectId: string, newData: partialProjectDTO) {//: Promise< ProjectDocument >
-    const result = await ProjectModel.updateOne({_id: projectId}, newData);
-    if(result.acknowledged){
-        return ProjectModel.findById(projectId);
+async function updateProject(projectId: string, newData: partialProjectDTO, userId: string) {//: Promise< ProjectDocument >
+    if( await checkProjectOwnerShip(projectId, userId) ){
+        const result = await ProjectModel.updateOne({_id: projectId}, newData);
+        if(result.acknowledged){
+            return ProjectModel.findById(projectId);
+        }
+        else return null;
     }
-    else return null;
 }
 
 
@@ -69,8 +71,14 @@ async function updateProject(projectId: string, newData: partialProjectDTO) {//:
 	- returns 404 if id couldn't be found --> already deleted/never existed
 	* : Promise<number>
  */
-async function deleteById(projectId: string) {
-    return ProjectModel.deleteOne({_id: projectId});
+async function deleteById(projectId: string, userId: string) {
+    if( await checkProjectOwnerShip(projectId, userId) ) return ProjectModel.deleteOne({_id: projectId});
+}
+async function checkProjectOwnerShip(projectId: string, userId: string) {
+    const project = await ProjectModel.findById(projectId);
+    if(!project) return null;//throw ApiError.notFound(`Project not found`);
+    if (project.owner_id.toString() != userId) throw ApiError.forbidden(`Not your project`);
+    return project;
 }
 
 export const query = {

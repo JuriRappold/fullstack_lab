@@ -19,7 +19,11 @@ export {
     type httpCode,
     isStatus,
     isProjectDTO,
-    isPartialProjectDTO
+    isPartialProjectDTO,
+    userDTO,
+    partialUserDTO,
+    isPartialUserDTO,
+    isUserDTO,
 } from './types/index.js';
 
 export { ApiError } from './ApiError.js';

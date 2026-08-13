@@ -20,4 +20,8 @@ export {
     isStatus,
     isProjectDTO,
     isPartialProjectDTO,
+    userDTO,
+    partialUserDTO,
+    isPartialUserDTO,
+    isUserDTO,
 } from './dataTransferObjects.js'

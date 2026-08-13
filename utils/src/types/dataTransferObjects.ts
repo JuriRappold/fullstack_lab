@@ -97,9 +97,7 @@ function isStringArray(value: unknown): value is string[] {
     return Array.isArray(value) && value.every(item => typeof item === "string");
 }
 
-export function isPartialProjectDTO(
-    value: unknown
-): value is partialProjectDTO {
+export function isPartialProjectDTO( value: unknown): value is partialProjectDTO {
     if (typeof value !== "object" || value === null) {
         return false;
     }
@@ -119,14 +117,52 @@ export function isPartialProjectDTO(
 function isOptionalString(value: unknown): boolean {
     return value === undefined || typeof value === "string";
 }
-
 function isOptionalStatus(value: unknown): boolean {
     return value === undefined || isStatus(value);
 }
-
 function isOptionalStringArray(value: unknown): boolean {
     return (
         value === undefined ||
         (Array.isArray(value) && value.every(item => typeof item === "string"))
     );
+}
+
+/*
+**USER**
+ */
+export interface userDTO extends DTO {
+    username: string,
+    password?: string,
+    token?: string,
+    id?: string
+}
+export function isUserDTO(value: unknown): value is userDTO {
+    if (typeof value !== "object" || value === null) {
+        return false;
+    }
+
+    const obj = value as Record<string, unknown>;
+    return (
+        typeof obj.username === "string" &&
+        isOptionalString(obj.password) &&
+        isOptionalString(obj.token)
+    );
+}
+
+export interface partialUserDTO extends DTO {
+    username?: string,
+    password?: string,
+    token?: string,
+    id?: string
+}
+export function isPartialUserDTO(value: unknown): value is partialUserDTO {
+    if (typeof value !== "object" || value === null) {
+        return false;
+    }
+
+    const obj = value as Record<string, unknown>;
+    return isOptionalString(obj.username) &&
+        isOptionalString(obj.password) &&
+        isOptionalString(obj.token) &&
+        isOptionalString(obj.id);
 }

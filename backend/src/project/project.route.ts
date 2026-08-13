@@ -12,6 +12,7 @@ import {
     createNewProject,
     deleteProjectById, updateProjectById
 } from './project.controller.js'
+import {authMiddleware} from "../middleware/authentication.js";
 
 export const router = Router();
 
@@ -20,7 +21,7 @@ Middleware for CRUPD Ops:
 - logged in
 - owner of the project
  */
-// router.use(authMiddleware)
+router.use(authMiddleware)
 
 /*
 **CREATE**

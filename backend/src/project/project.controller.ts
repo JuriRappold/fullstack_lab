@@ -20,7 +20,6 @@ import {
 } from "@fullstack-lab/utils";
 import {Request, Response} from 'express';
 import {createProject, delProjectId, getProjectBy, getProjectFrom, updateProById} from './project.model.js'
-import {UpdateWriteOpResult} from "mongoose";
 
 /*
 **CREATE**
@@ -74,6 +73,7 @@ export const getProjectById = asyncHandler( async (
     const project = await getProjectBy(projectId)
     if(!project) throw ApiError.notFound(`Project with id ${projectId} was not found`);
     //send response
+    if (project._id != req.user.id) throw ApiError.forbidden(`Not your Project`);
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,
@@ -86,10 +86,10 @@ export const getProjectsOf = asyncHandler( async (
     req: Request< { userId: string }, responseBody<projectDTO[]>, never >,
     res: Response<responseBody<projectDTO[]>>
 ) => {
-    const userId = req.params.userId;
+    const userId = req.user.id
     if(!isUUID.test(userId)) throw ApiError.badRequest(`Invalid UUID: ${userId}`);
     const projects: projectDTO[] = await getProjectFrom(userId);
-
+    // if (project._id != req.user.id) throw ApiError.forbidden(`Not your Project`);
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,
