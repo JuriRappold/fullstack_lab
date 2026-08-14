@@ -1,11 +1,14 @@
 import { query } from './user.query.js';
 import {
-    hashPassword,
-    compareHashedPassword, format,
+    format,
 } from "./user.utils.js";
 import {
     generateToken,
-} from '../middleware/jwt.js'
+} from '../middleware/jwt.js';
+import {
+    hashPassword,
+    compareHashedPassword,
+} from '../middleware/hashPassword.js';
 import {ApiError, userDTO} from "@fullstack-lab/utils";
 import {UserDocument} from "../database/index.js";
 

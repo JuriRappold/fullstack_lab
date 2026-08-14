@@ -7,7 +7,7 @@ const uri: string = process.env.dev_DB_URL || "";
 if (!uri) {
     throw new Error(`DB_URL not defined`);
 }
-const connection = createConnection(uri);
+export const connection = createConnection(uri);
 
 // SCHEMAS
 
@@ -119,3 +119,5 @@ export type UpdateData = InferSchemaType<typeof updateSchema>;
 export type UpdateDocument = HydratedDocument< UpdateData >;
 
 export type OBJECT_ID = Schema.Types.ObjectId
+
+// export const closeConnection = connection.close;
