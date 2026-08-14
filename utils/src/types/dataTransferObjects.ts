@@ -1,5 +1,18 @@
-export interface DTO {}
-
+function isStringArray(value: unknown): value is string[] {
+    return Array.isArray(value) && value.every(item => typeof item === "string");
+}
+function isOptionalString(value: unknown): boolean {
+    return value === undefined || typeof value === "string";
+}
+function isOptionalStatus(value: unknown): boolean {
+    return value === undefined || isStatus(value);
+}
+function isOptionalStringArray(value: unknown): boolean {
+    return (
+        value === undefined ||
+        (Array.isArray(value) && value.every(item => typeof item === "string"))
+    );
+}
 /*
 | **PROJECT**   |
 |---------------|
@@ -21,7 +34,7 @@ export function isStatus(value: unknown): value is STATUS {
     return typeof value === "string" && statuses.includes(value as STATUS);
 }
 
-export interface projectDTO extends DTO {
+export type projectDTO = {
     title: string,
     description: string,
     status: STATUS,
@@ -29,53 +42,7 @@ export interface projectDTO extends DTO {
     contributors: string[]
     readonly  _id?: string
 }
-
-export interface partialProjectDTO extends DTO {
-    title?: string,
-    description?: string,
-    status?: STATUS,
-    owner_id?: string, // can't use object-id here, bc circular import
-    contributors?: string[]
-    readonly  _id?: string
-}
-export function getProjectDTO(obj: projectDTO){
-    //limit title to 50 char
-    if(obj.title.length > 50) throw new Error('The title is too long.');
-    //limit description to 500
-    if(obj.description.length > 500) throw new Error('The description is too long.');
-
-    if (obj.contributors.length < 1 || obj.contributors[0] != obj.owner_id) throw new Error('No/Invalid Contributors');
-    //id-reggex?
-
-    const DTO: projectDTO = {
-        title: obj.title,
-        description: obj.description,
-        status: obj.status,
-        owner_id: obj.owner_id,
-        contributors: obj.contributors,
-        _id: obj._id
-    } satisfies projectDTO;
-
-    return DTO;
-}
-export function getPartialProjectDTO(obj: partialProjectDTO){
-    //limit title to 50 char
-    if(obj.title && obj.title.length > 50) throw new Error('The title is too long.');
-    //limit description to 500
-    if(obj.description && obj.description.length > 500) throw new Error('The description is too long.');
-
-    if (obj.contributors && (obj.contributors.length < 1 || obj.contributors[0] != obj.owner_id) ) throw new Error('No/Invalid Contributors');
-
-    const DTO: partialProjectDTO = {
-        title: obj.title,
-        description: obj.description,
-        status: obj.status,
-        owner_id: obj.owner_id,
-        contributors: obj.contributors
-    } satisfies partialProjectDTO
-
-    return DTO;
-}
+export type partialProjectDTO = Partial<projectDTO>;
 
 export function isProjectDTO(value: unknown): value is projectDTO {
     if (typeof value !== "object" || value === null) {
@@ -93,10 +60,6 @@ export function isProjectDTO(value: unknown): value is projectDTO {
         (obj._id === undefined || typeof obj._id === "string")
     );
 }
-function isStringArray(value: unknown): value is string[] {
-    return Array.isArray(value) && value.every(item => typeof item === "string");
-}
-
 export function isPartialProjectDTO( value: unknown): value is partialProjectDTO {
     if (typeof value !== "object" || value === null) {
         return false;
@@ -114,27 +77,15 @@ export function isPartialProjectDTO( value: unknown): value is partialProjectDTO
     );
 }
 
-function isOptionalString(value: unknown): boolean {
-    return value === undefined || typeof value === "string";
-}
-function isOptionalStatus(value: unknown): boolean {
-    return value === undefined || isStatus(value);
-}
-function isOptionalStringArray(value: unknown): boolean {
-    return (
-        value === undefined ||
-        (Array.isArray(value) && value.every(item => typeof item === "string"))
-    );
-}
 
 /*
 **USER**
  */
-export interface userDTO extends DTO {
+export type userDTO = {
     username: string,
     password?: string,
     token?: string,
-    id?: string
+    readonly id?: string
 }
 export function isUserDTO(value: unknown): value is userDTO {
     if (typeof value !== "object" || value === null) {
@@ -149,12 +100,7 @@ export function isUserDTO(value: unknown): value is userDTO {
     );
 }
 
-export interface partialUserDTO extends DTO {
-    username?: string,
-    password?: string,
-    token?: string,
-    id?: string
-}
+export type partialUserDTO = Partial<userDTO>
 export function isPartialUserDTO(value: unknown): value is partialUserDTO {
     if (typeof value !== "object" || value === null) {
         return false;
@@ -165,4 +111,48 @@ export function isPartialUserDTO(value: unknown): value is partialUserDTO {
         isOptionalString(obj.password) &&
         isOptionalString(obj.token) &&
         isOptionalString(obj.id);
+}
+
+
+/*
+**UPDATE**
+*/
+export type updateDTO = {
+    title: string,
+    description: string,
+    project_id: string,
+    contributor_id: string,
+    readonly id?: string
+}
+export type partialUpdateDTO = Partial<updateDTO>;
+
+export function isUpdateDTO(value: unknown): value is updateDTO {
+    if (typeof value !== "object" || value === null) {
+        return false;
+    }
+
+    const obj = value as Record<string, unknown>;
+
+    return (
+        typeof obj.title === "string" &&
+        typeof obj.description === "string" &&
+        typeof obj.project_id === "string" &&
+        typeof obj.contributor_id === "string" &&
+        isOptionalString(obj.id)
+    );
+}
+export function isPartialUpdateDTO(value:unknown): value is partialUpdateDTO {
+    if (typeof value !== "object" || value === null) {
+        return false;
+    }
+
+    const obj = value as Record<string, unknown>;
+
+    return (
+        isOptionalString(obj.title) &&
+        isOptionalString(obj.description) &&
+        isOptionalString(obj.project_id) &&
+        isOptionalString(obj.contributor_id) &&
+        isOptionalString(obj.id)
+    )
 }

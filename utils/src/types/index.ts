@@ -12,16 +12,17 @@ export {
 } from './http.codes.js'
 
 export {
-    type DTO,
     type projectDTO,
     type partialProjectDTO,
-    getProjectDTO,
-    getPartialProjectDTO,
     isStatus,
     isProjectDTO,
     isPartialProjectDTO,
-    userDTO,
-    partialUserDTO,
+    type userDTO,
+    type partialUserDTO,
     isPartialUserDTO,
     isUserDTO,
+    type updateDTO,
+    type partialUpdateDTO,
+    isUpdateDTO,
+    isPartialUpdateDTO
 } from './dataTransferObjects.js'

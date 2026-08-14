@@ -129,4 +129,35 @@ Focus: DB & API design
 
 
 # Thur. 13.08.2026
-- [ ] user auth --> register, login, auth-middleware
+- implemented user registration & login
+- implemented user authentication
+- implemented Wednesdays ToDo
+- changed the response & request body shapes to take a generic --> greater flexibility on what kind of data is to be transfered
+- changed the exported types from schema to be `<table>Data` & `<table>Document`
+- implemented userDTO in *utils*
+  - including type-narrowing functions for all DTOs
+
+# Fri. 14.08.2026
+Goal: Finish BE
+2nd Goal: get somewhat started on FE
+
+## Whats still left of BE?
+- *update* endpoints
+  - create: POST `/api/update/:projectId` --> returns 201 w/ updated document
+    - update data in req.body
+  - read: 
+    - GET `/api/update/:projectId` --> returns 200 w/ array of updates of the given projectId
+    - GET `/api/update/:updateId` --> returns 200 w/ update document
+- min. 2 relational endpoints
+  - an endpoint that gets a project w/ all updates
+  - an endpoint that gets a users project
+  - an endpoint that gets a users contributions (i.e. updates)
+
+==> TODO:
+- updateDTOX
+  - partial & narrowing functions
+- routesX
+- controllersX
+- modelsX
+- queriesX
+

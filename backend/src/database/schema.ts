@@ -1,7 +1,8 @@
 import {Schema, InferSchemaType, createConnection, HydratedDocument} from 'mongoose';
-import {ObjectId} from "mongodb";
 
-// Connection
+/* Connection --> acutally lets import it from the connection.ts?
+--> i think connection.ts is some kind fo manual way of createConnection...
+ */
 const uri: string = process.env.dev_DB_URL || "";
 if (!uri) {
     throw new Error(`DB_URL not defined`);
@@ -113,10 +114,6 @@ export type UserDocument = HydratedDocument< UserData >;
 
 export type ProjectData = InferSchemaType<typeof projectSchema>;
 export type ProjectDocument = HydratedDocument< ProjectData >;
-
-
-
-
 
 export type UpdateData = InferSchemaType<typeof updateSchema>;
 export type UpdateDocument = HydratedDocument< UpdateData >;

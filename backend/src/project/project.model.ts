@@ -6,7 +6,6 @@ PURPOSE:
  */
 import { query } from "./project.query.js";
 import {
-    ApiError,
     partialProjectDTO,
     projectDTO,
 } from '@fullstack-lab/utils'
@@ -41,8 +40,8 @@ export const createProject = async (newProject: projectDTO): Promise<projectDTO>
 - returns 400 if invalid id
  */
 
-export const getProjectBy = async (projectId: string): Promise<projectDTO | null> => {
-    const project = await query.read.projectById(projectId);
+export const getProjectBy = async (projectId: string, userId: string): Promise<projectDTO | null> => {
+    const project = await query.read.projectById(projectId, userId);
     if(!project) return null;
     else {
         return format.DocumentToDTO(project);
@@ -54,17 +53,13 @@ export const getProjectFrom = async (userId: string): Promise<projectDTO[]> => {
 }
 
 
-export const delProjectId = async (projectId: string): Promise<boolean> => {
-    const result = await query.delete.deleteById(projectId);
+export const delProjectId = async (projectId: string, userId: string): Promise<boolean> => {
+    const result = await query.delete.deleteById(projectId, userId);
     return result.acknowledged;
 }
 
-export const updateProById = async (projectId: string, newData: partialProjectDTO) => {
-//     return query.update.updateProject(
-//         projectId,
-//         newData
-//     )
-    const result = await query.update.updateProject(projectId, newData);
+export const updateProById = async (projectId: string, newData: partialProjectDTO, userId: string) => {
+    const result = await query.update.updateProject(projectId, newData, userId);
     if(!result) return result;
     else{
         return format.DocumentToDTO(result);

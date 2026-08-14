@@ -7,8 +7,8 @@ import {
     ProjectDocument,
 } from '../database/index.js';
 import {
-    ApiError, partialProjectDTO,
-    // type partialProjectDTO,
+    ApiError,
+    type partialProjectDTO,
     type projectDTO,
 } from '@fullstack-lab/utils';
 
@@ -73,6 +73,7 @@ async function updateProject(projectId: string, newData: partialProjectDTO, user
  */
 async function deleteById(projectId: string, userId: string) {
     if( await checkProjectOwnerShip(projectId, userId) ) return ProjectModel.deleteOne({_id: projectId});
+    return { acknowledged: false };
 }
 async function checkProjectOwnerShip(projectId: string, userId: string) {
     const project = await ProjectModel.findById(projectId);
