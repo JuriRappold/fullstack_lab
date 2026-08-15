@@ -1,6 +1,14 @@
 // OBJECTS/FUNCTIONS
-export { User, Project, Update } from './schema.js';
+export { UserModel, ProjectModel, UpdateModel } from './schema.js';
 export { db } from './connection.js';
 
 //TYPES
-export type { USER, PROJECT, UPDATE } from './schema.js';
+export type {
+    UserData,
+    UserDocument,
+    ProjectData,
+    ProjectDocument,
+    UpdateData,
+    UpdateDocument,
+    OBJECT_ID, } from './schema.js';
+export { ObjectId } from "mongodb";

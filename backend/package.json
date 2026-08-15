@@ -10,7 +10,8 @@
     "build": "tsc",
     "start": "node --env-file=.env dist/server.js",
     "dev": "tsx --env-file=.env src/server.ts",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "seed": "tsx --env-file=.env src/database/seed.ts"
   },
   "author": "",
   "license": "ISC",
