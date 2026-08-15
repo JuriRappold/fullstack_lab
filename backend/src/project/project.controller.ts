@@ -92,7 +92,7 @@ export const getProjectById = asyncHandler( async (
     return;
 })
 
-export const getProjectsOf = asyncHandler( async (
+export const getProjectsOfUser = asyncHandler( async (
     req: Request< { userId: string }, responseBody<projectDTO[]>, never >,
     res: Response<responseBody<projectDTO[]>>
 ) => {

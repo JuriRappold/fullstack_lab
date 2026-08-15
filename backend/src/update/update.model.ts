@@ -24,7 +24,7 @@ export const createUpdate = async (newData: updateDTO, userId: string): Promise<
  * @return updateDTO[] if allowed. Can be empty if there are no updates for a project
  */
 export const getUpdatesOfProject = async (projectId: string, userId: string): Promise<updateDTO[] | null> => {
-    const updates: UpdateDocument[] | null = await query.read.getUpdatesOf(projectId, userId);
+    const updates: UpdateDocument[] | null = await query.read.getUpdatesOfProject(projectId, userId);
     if (!updates) return null;
     return updates.map(format.DocumentToDTO);
 }

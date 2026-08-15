@@ -28,8 +28,9 @@ export const logInUser = asyncHandler( async (
     res: Response< responseBody<userDTO> >
 ) => {
     const user = req.body!.data!;
-    const result = await logIn(user.username, user.password!);
+    let result: userDTO | null = await logIn(user.username, user.password!);
     if (!result) throw ApiError.internal(`something went wrong while loggin in`);
+    result = format.stripPassword(result);
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,

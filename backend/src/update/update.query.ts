@@ -48,7 +48,8 @@ async function addContributor(projectId: string, userId: string) {
 * --> if the user is not in the contribution list of the project, add user to the contribution list
  */
 /**
- * Returns null --> http: 500
+ * Returns null --> http: 500;
+ * True in both cases (!result & UpdateMode.create())
  * @param newData
  * @param userId
  */
@@ -64,7 +65,7 @@ async function newUpdate(newData: UpdateData, userId: string): Promise<UpdateDoc
 /*
 **READ**
  */
-async function getUpdatesOf(projectId: string, userId: string): Promise<UpdateDocument[] | null> {
+async function getUpdatesOfProject(projectId: string, userId: string): Promise<UpdateDocument[] | null> {
     if(await checkIfAllowed(projectId, userId)) {
         return UpdateModel.find({project_id: projectId})
     }
@@ -84,7 +85,7 @@ export const query = {
         newUpdate
     },
     read: {
-        getUpdatesOf,
+        getUpdatesOfProject,
         getUpdateById
     }
 }

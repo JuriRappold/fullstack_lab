@@ -8,7 +8,7 @@ BASE URL: /api/projects
 import { Router } from 'express';
 import {
     getProjectById,
-    getProjectsOf,
+    getProjectsOfUser,
     createNewProject,
     deleteProjectById, updateProjectById
 } from './project.controller.js'
@@ -45,7 +45,7 @@ router.post('/create', createNewProject)
 - returns 400 if invalid id
  */
 router.get('/:id', getProjectById);
-router.get('/:userId', getProjectsOf);
+router.get('/user/:userId', getProjectsOfUser);
 
 /*
 **UPDATE**

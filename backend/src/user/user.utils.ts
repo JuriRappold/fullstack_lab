@@ -22,9 +22,14 @@ const DTOtoData = (userDto: userDTO) => {
         password: userDto.password || ''
     } satisfies UserData
 }
-const stripPassword = (user: userDTO) => {
-    const tmp: Exclude<userDTO, 'password'> = user;
-    return tmp;
+// Does not strip the password
+// const stripPassword = (user: userDTO) => {
+//     const tmp: Exclude<userDTO, 'password'> = user;
+//     return tmp;
+// }
+const stripPassword = (user: userDTO): userDTO => {
+    const { password, ...rest} = user;
+    return rest satisfies userDTO;
 }
 export const format = {
     DocumentToDTO,
