@@ -161,3 +161,21 @@ Goal: Finish BE
 - modelsX
 - queriesX
 
+
+
+# Sat. 15.08.2026
+- merged BE API
+- brainstormed FE
+- started on user Authentication
+
+# So. 16.08.2026
+- implementing userAuth
+  - AuthContext
+  - AuthExpiredError
+  - AuthService
+- GET `/api/user/me` route implemented
+- types
+  - requestShape.ts --> class to get easy request object
+- constants
+  - URLs.ts --> so far only the base url
+- basic setup for the App.tsx

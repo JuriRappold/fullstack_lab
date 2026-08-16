@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { ApiError } from "@fullstack-lab/utils";
+import {ApiError, type responseError} from "@fullstack-lab/utils";
 
 /**
  * Global error handler middleware.
@@ -18,7 +18,7 @@ export function errorHandler(
         res.status(err.statusCode).json({
             error: err.message,
             statusCode: err.statusCode,
-        });
+        } satisfies responseError);
         return;
     }
 
@@ -27,5 +27,5 @@ export function errorHandler(
     res.status(500).json({
         error: 'Internal server error',
         statusCode: 500,
-    });
+    } satisfies responseError);
 }

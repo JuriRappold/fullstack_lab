@@ -33,3 +33,9 @@ export const register = async (username: string, password: string): Promise<user
 
     return format.DocumentToDTO(user, token);
 }
+
+export const getMeModel = async (username: string): Promise<userDTO | null> =>  {
+    const tmp: UserDocument | null = await query.read.userByName(username);
+    if (!tmp) return tmp;
+    return format.DocumentToDTO(tmp);
+}
