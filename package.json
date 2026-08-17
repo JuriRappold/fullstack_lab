@@ -1,0 +1,26 @@
+{
+  "name": "fullstack-lab",
+  "version": "1.0.0",
+  "description": "Only to Concurrently start the Frontend and Backend",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuriRappold/fullstack_lab.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JuriRappold/fullstack_lab/issues"
+  },
+  "homepage": "https://github.com/JuriRappold/fullstack_lab#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
