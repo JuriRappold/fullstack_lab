@@ -1,7 +1,7 @@
 import {
     registerRequest,
     logInRequest,
-    type fullUser, getMe
+    getMe
 } from '../services/AuthService.ts';
 import {
     createContext,
@@ -9,27 +9,21 @@ import {
     useContext,
     useEffect,
 } from "react";
-
-type halfUser = Omit<fullUser, 'token'>;
+import {
+    type AuthContextValue,
+    type authHeader,
+    type emptyObject,
+    type fullUser,
+    type halfUser
+} from '../types/'
 // KEYS
 const TOKEN_KEY = 'lab_token';
 
 const SESSION_KEY = 'lab_session';
 
 // CONTEXT
-type AuthContextValue = {
-    user: halfUser | null;
-    token: string | null;
-    isAuthenticated: boolean;
-    loading: boolean;
-    logIn: (username: string, password: string) => Promise<halfUser>;
-    register: (username: string, password: string) => Promise<halfUser>;
-    logout: () => void;
-    getAuthHeader: () => Record<string, string>;
-};
-const empptyObject = {} as const;
-type emptyObject = typeof empptyObject;
-type authHeader = { Authorization: `Bearer ${string}` };
+
+
 
 const AuthContext = createContext<null | AuthContextValue>(null);
 

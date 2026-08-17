@@ -5,7 +5,6 @@ import {
   Route,
   Navigate,
   useLocation,
-  useNavigate,
   NavLink,
   BrowserRouter
 } from 'react-router-dom';
@@ -81,7 +80,6 @@ function Placeholder({ title }) {
   )
 }
 function AppRoutes(){
-  const useProtected = false;
   return(
       <>
         <main>

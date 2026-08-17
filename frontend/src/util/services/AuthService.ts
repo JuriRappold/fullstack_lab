@@ -2,8 +2,9 @@ import {
     BASE
 } from "../constants/URLs.ts";
 import {
+    type fullUser,
     RequestObject
-} from "../types/requestShape.ts";
+} from "../types";
 import {
     type responseBody,
     type responseError,
@@ -11,7 +12,7 @@ import {
     isResponseError
 } from '@fullstack-lab/utils';
 
-export type fullUser = Omit<Required<userDTO>, 'password'>;
+// export type fullUser = Omit<Required<userDTO>, 'password'>;
 const userURL = `${BASE}/user` as const;
 
 async function getData(res: Response): Promise<fullUser>{
@@ -39,7 +40,7 @@ export async function registerRequest(username: string, password: string): Promi
 }
 
 export async function getMe(token: string): Promise<userDTO> {
-    const req = RequestObject.GET(`auth${token} content`);
+    const req = RequestObject.GET(true, token);
     const res: Response = await fetch(`${userURL}/me`, req);
     return getData(res);
 }
