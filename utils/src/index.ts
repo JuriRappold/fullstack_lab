@@ -1,4 +1,8 @@
-export { type responseBody } from './response.shape.js';
+export {
+    type responseBody,
+    type responseError,
+    isResponseError,
+} from './response.shape.js';
 export { type requestBody } from './request.shape.js';
 
 export {
