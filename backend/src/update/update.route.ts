@@ -2,7 +2,7 @@ import {Router} from "express";
 import {
     newUpdate,
     readUpdateById,
-    readUpdatesOfProject
+    readUpdatesOfProject, readUpdatesOfUser
 } from './update.controller.js';
 import { checkID } from "../middleware/isUUID.js";
 import { authMiddleware } from '../middleware/authentication.js'
@@ -15,10 +15,13 @@ POST `/api/update/:projectId`
  */
 router.post('/:projectId', checkID, newUpdate);
 /*
-GET `/api/update/:projectId`
-GET `/api/update/:updateId`
+GET `/api/update/project/:projectId`
+GET `/api/update/update/:updateId`
+GET `/api/update/user/
 --> contribution/owner check
  */
 router.get('/project/:projectId', checkID, readUpdatesOfProject);
 
-router.get('/update/:updateId', checkID, readUpdateById)
+router.get('/update/:updateId', checkID, readUpdateById);
+
+router.get('/user/', readUpdatesOfUser);

@@ -1,8 +1,3 @@
-// import {
-//     createUpdate,
-//     getUpdatesFromProject,
-//     getUpdateById
-// } from './update.model.js';
 import {asyncHandler} from "../middleware/asyncHandler.js";
 import {
     Request,
@@ -21,7 +16,8 @@ import {
 import {
     createUpdate,
     getUpdateById,
-    getUpdatesOfProject
+    getUpdatesOfProject,
+    getUpdateOfUser
 } from './update.model.js'
 
 
@@ -71,5 +67,19 @@ export const readUpdateById = asyncHandler( async(
         message: httpOK.message,
         data: result
     } satisfies responseBody<updateDTO>)
+    return;
+})
+
+export const readUpdatesOfUser = asyncHandler( async(
+    req: Request<never, responseBody<updateDTO[]>, never>,
+    res: Response<responseBody<updateDTO[]>>
+) => {
+    const userId = req.user.id;
+    const result = await getUpdateOfUser(userId);
+    res.status(httpOK.status).json({
+        status: httpOK.status,
+        message: httpOK.message,
+        data: result
+    } satisfies responseBody<updateDTO[]>);
     return;
 })

@@ -79,6 +79,9 @@ async function getUpdateById( updateId: string, userId: string): Promise<UpdateD
     }
     else throw ApiError.forbidden(`Contribute to the Project First`);
 }
+async function getUpdateOfUser( userId: string ): Promise<UpdateDocument[]> {
+    return UpdateModel.find({contributor_id: userId});
+}
 
 export const query = {
     create: {
@@ -86,6 +89,7 @@ export const query = {
     },
     read: {
         getUpdatesOfProject,
-        getUpdateById
+        getUpdateById,
+        getUpdateOfUser
     }
 }

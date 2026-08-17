@@ -42,3 +42,8 @@ export const getUpdateById = async ( updateId: string, userId: string): Promise<
     if(!update) return null;
     return format.DocumentToDTO(update);
 }
+
+export const getUpdateOfUser = async ( userId: string): Promise<updateDTO[]> => {
+    const updates: UpdateDocument[] = await query.read.getUpdateOfUser(userId);
+    return updates.map(format.DocumentToDTO);
+}
