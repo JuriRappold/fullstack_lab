@@ -44,3 +44,4 @@ export async function getMe(token: string): Promise<userDTO> {
     const res: Response = await fetch(`${userURL}/me`, req);
     return getData(res);
 }
+

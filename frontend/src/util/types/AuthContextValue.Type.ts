@@ -11,3 +11,4 @@ export type AuthContextValue = {
     logout: () => void;
     getAuthHeader: () => Record<string, string>;
 };
+
