@@ -2,6 +2,9 @@ import {useAuth} from "../util/context/AuthContext.tsx";
 import {NavLink} from "react-router-dom";
 // import {BrokenComponent} from "./BrokenComponent.tsx";
 import {AuthExpiredError} from "../util/errors/AuthExpiredError.ts";
+import {CustomButton} from "../components";
+import type {CustomButtonHandle} from "../components/CustomButton.tsx";
+import {useRef} from "react";
 
 export function Placeholder({ title }: { title: string}) {
     const { isAuthenticated, user, logout } = useAuth();
@@ -9,6 +12,15 @@ export function Placeholder({ title }: { title: string}) {
         // throw new Error("This Button causes an Error", {cause: "I'm stupid"})
         throw new AuthExpiredError(`Testing the AuthExpiredError`);
     };
+    const buttonRef = useRef<CustomButtonHandle>(null);
+
+    function handleDisable() {
+        buttonRef.current?.disableButton();
+    }
+
+    function handleEnable() {
+        buttonRef.current?.enableButton();
+    }
     return (
     <div style={{ padding: '48px 24px', maxWidth: '600px', margin: '0 auto' }}>
         <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.8rem', marginBottom: '12px', color: '#1a1a1a' }}>
@@ -42,8 +54,22 @@ export function Placeholder({ title }: { title: string}) {
         </ol>
 
         <div style={{color: "red"}}>
-            <button onClick={stupid}>Cause Error</button>
+            {/*<button onClick={stupid}>Cause Error</button>*/}
             {/*<BrokenComponent />*/}
+            <CustomButton ref={buttonRef} onPush={{pathname: "/projects/create"}}/> <br />
+            <p>
+                <div>
+                    <button onClick={handleDisable}>
+                        Disable
+                    </button><br />
+                </div>
+
+                <p>
+                    <button onClick={handleEnable}>
+                        Enable
+                    </button><br />
+                </p>
+            </p>
         </div>
     </div>
     )

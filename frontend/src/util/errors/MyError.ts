@@ -20,15 +20,33 @@ export class MyError extends Error{
     readonly reRoute: string;
     constructor(error:
         normalError
-        | responseError){
+        | responseError
+        | Error
+    ){
         let normal = error;
-        if(!MyError.isMyError(normal)  && isResponseError(normal)){
-            normal = MyError.convertResToMy(normal);
+        if(!MyError.isMyError(normal) ){
+            if(isResponseError(normal)){
+                normal = MyError.convertResToMy(normal);
+            }
+            else if(normal instanceof Error){
+                normal = MyError.convertErrToMy(normal);
+            }
+            else {
+                normal = {
+                    message: "",
+                    cause: "",
+                    text: "Try Again",
+                    reRoute: "/"
+                } satisfies normalError
+            }
         }
-        super(normal.message, {cause: normal.cause});
-        this.name = normal.name ?? "Error";
-        this.text = normal.text ?? "Try Again";
-        this.reRoute = "/" + (normal.reRoute ?? "") ;
+        if(MyError.isMyError(normal)){
+            super(normal.message, {cause: normal.cause});
+            this.name = normal.name ?? "Error";
+            this.text = normal.text ?? "Try Again";
+            this.reRoute = "/" + (normal.reRoute ?? "") ;
+        }
+        else throw new MyError({message: "Failed To Create Original Error", cause: "Original Error was not a valid Parameter", reRoute: "/", name: "ErrorCreationError", text:"Try Again"} satisfies normalError)
     }
     static isMyError(error: unknown): error is MyError {
         if (typeof error !== "object" || error === null || error !instanceof Error) {
@@ -49,6 +67,14 @@ export class MyError extends Error{
             message: err.error,
             cause: err.statusCode.toString(),
             name: "ApiError"
+        }
+    }
+    static convertErrToMy(err: Error){
+        return {
+            message: err.message,
+            cause: String(err.cause ?? "Unknown"),
+            reRoute: '/',
+            text: "Try Again"
         }
     }
 }

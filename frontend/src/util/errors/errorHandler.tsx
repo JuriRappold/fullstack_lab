@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {ErrorPage} from "./errorPage.tsx";
+import {MyError} from "./MyError.ts";
 
 
 
@@ -38,6 +39,6 @@ export function ErrorHandler( { children }: { children: React.ReactNode } ) {
     }, [error]);
 
 
-    if(error) return <ErrorPage error={error} onReset={clearError} />;
+    if(error) return <ErrorPage error={new MyError(error)} onReset={clearError} />;
     else return <>{children}</>;
 }

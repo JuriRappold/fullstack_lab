@@ -2,8 +2,8 @@ import { useNavigate} from "react-router-dom";
 import { MyError } from "./MyError.ts";
 import { ApiError } from "@fullstack-lab/utils";
 
-interface ErrorProp  {
-    error: MyError,
+interface ErrorProp<T extends Error>  {
+    error: T,
     onReset: () => void
 }
 
@@ -11,7 +11,7 @@ export function ErrorPage({error, onReset}: ErrorProp){
     const navigate = useNavigate();
     function tryAgain() {
         onReset();
-        if (!(error instanceof ApiError)) {
+        if (MyError.isMyError(error)) {
             navigate(error.reRoute);
         }
         else { navigate('/') }
@@ -20,11 +20,11 @@ export function ErrorPage({error, onReset}: ErrorProp){
         <>
             <h1>Something went wrong!</h1>
             <p>
-                Type: {error.name}<br/>
-                Message: {error.message}<br/>
+                Type: {error.name ?? "Error"}<br/>
+                Message: {error.message ?? "An Error Occurred"}<br/>
                 Cause: {String(error.cause ?? 'Unknown')}<br/>
             </p>
-            <button onClick={tryAgain}>{error.text}</button>
+            <button onClick={tryAgain}>{String(error.text ?? "Try Again") }</button>
         </>
     )
 }
