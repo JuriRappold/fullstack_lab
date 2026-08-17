@@ -11,15 +11,21 @@ import {
     type userDTO,
     isResponseError
 } from '@fullstack-lab/utils';
+import {MyError} from "../errors";
 
-// export type fullUser = Omit<Required<userDTO>, 'password'>;
 const userURL = `${BASE}/user` as const;
 
 async function getData(res: Response): Promise<fullUser>{
     const json: responseBody<fullUser> | responseError = await res.json(); //
     if (isResponseError(json)) {
-        if (!res.ok) throw new Error(`${json.statusCode}:${json.error}`);
-        else throw new Error(`Something went wrong`)
+        // if (!res.ok) throw new MyError({
+        //     message: `${json.statusCode}:${json.error}`,
+        //     cause: json.statusCode.toString(),
+        //     name:'ApiError'
+        // } satisfies normalError
+        // );
+        // else throw new MyError(json);
+        throw new MyError(json);
     }
     else return json.data;
 }

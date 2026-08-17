@@ -1,15 +1,20 @@
 import { useNavigate} from "react-router-dom";
+import { MyError } from "./MyError.ts";
+import { ApiError } from "@fullstack-lab/utils";
 
 interface ErrorProp  {
-    error: Error,
+    error: MyError,
     onReset: () => void
 }
 
 export function ErrorPage({error, onReset}: ErrorProp){
     const navigate = useNavigate();
-    function tryAgain(){
+    function tryAgain() {
         onReset();
-        navigate('/');
+        if (!(error instanceof ApiError)) {
+            navigate(error.reRoute);
+        }
+        else { navigate('/') }
     }
     return (
         <>
@@ -19,7 +24,7 @@ export function ErrorPage({error, onReset}: ErrorProp){
                 Message: {error.message}<br/>
                 Cause: {String(error.cause ?? 'Unknown')}<br/>
             </p>
-            <button onClick={tryAgain}>Try Again</button>
+            <button onClick={tryAgain}>{error.text}</button>
         </>
     )
 }

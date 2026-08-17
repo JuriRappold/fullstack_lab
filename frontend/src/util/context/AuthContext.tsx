@@ -7,7 +7,7 @@ import {
     createContext,
     useState,
     useContext,
-    useEffect,
+    useEffect, type ReactNode,
 } from "react";
 import {
     type AuthContextValue,
@@ -16,6 +16,7 @@ import {
     type fullUser,
     type halfUser
 } from '../types/'
+import {MyError} from "../errors/MyError.ts";
 // KEYS
 const TOKEN_KEY = 'lab_token';
 
@@ -27,7 +28,7 @@ const SESSION_KEY = 'lab_session';
 
 const AuthContext = createContext<null | AuthContextValue>(null);
 
-export default function AuthProvider( {children} ){
+export default function AuthProvider( {children}: {children: ReactNode} ){
     const [token, setToken] = useState<null | string>(null);
     const [user, setUser] = useState<null | halfUser>(null);
     // const [loading, setLoading] = useState<boolean>(() => {
@@ -94,7 +95,7 @@ export default function AuthProvider( {children} ){
                     username: user.username,
                     id: user.id ?? ""
                 } satisfies halfUser;
-                if (!us.id)  throw new Error(`Something went wrong during authentication`);
+                if (!us.id)  throw new MyError(`Something went wrong during authentication`, 'No Id', 'login');
                 setToken(savedToken);
                 setUser(us);
             })

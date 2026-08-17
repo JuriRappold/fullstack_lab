@@ -1,12 +1,13 @@
 import {useAuth} from "../util/context/AuthContext.tsx";
 import {NavLink} from "react-router-dom";
-import {BrokenComponent} from "./BrokenComponent.tsx";
+// import {BrokenComponent} from "./BrokenComponent.tsx";
+import {AuthExpiredError} from "../util/errors/AuthExpiredError.ts";
 
 export function Placeholder({ title }: { title: string}) {
     const { isAuthenticated, user, logout } = useAuth();
     const stupid = () => {
-        throw new Error("This Button causes an Error", {cause: "I'm stupid"})
-        // throw new AuthExpiredError(`Testing the AuthExpiredError`);
+        // throw new Error("This Button causes an Error", {cause: "I'm stupid"})
+        throw new AuthExpiredError(`Testing the AuthExpiredError`);
     };
     return (
     <div style={{ padding: '48px 24px', maxWidth: '600px', margin: '0 auto' }}>
