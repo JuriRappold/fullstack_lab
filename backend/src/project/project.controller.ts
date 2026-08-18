@@ -20,7 +20,6 @@ import {
 } from "@fullstack-lab/utils";
 import {Request, Response} from 'express';
 import {createProject, delProjectId, getProjectBy, getProjectFrom, updateProById} from './project.model.js'
-import {MongoServerError} from "mongodb";
 
 /*
 **CREATE**
@@ -36,25 +35,22 @@ export const createNewProject = asyncHandler( async (
 ) => {
     const { data } = req.body
     if (!data) throw ApiError.badRequest(`No new data to create new project: ${data}`);
+    // const newData = {
+    //     ...data,
+    //     owner: {id: req.user.id, username: req.user.username},
+    //     contributors: [{id: req.user.id, username: req.user.username}],
+    // } satisfies projectDTO;
 
     if (isProjectDTO(data)){
-        try {
-            const newProject: projectDTO = await createProject(data)
+            const newProject = await createProject(data)
             if (!newProject) throw ApiError.internal(`Something went wrong: ${data}`);
+
             res.status(httpCreated.status).json({
                 status: httpCreated.status,
                 message: httpCreated.message,
                 data: newProject
             } satisfies responseBody<projectDTO>);
-        } catch(e) {
-            if ( e instanceof MongoServerError ){
-                if(e.code === 11000) throw ApiError.conflict(`Check the Title: ${JSON.stringify(e.keyValue)}`);
-                else throw ApiError.internal(`Something went wrong: ${e.errorResponse}`);
-            }
-            throw ApiError.internal(`Something went wrong: ${e}`);
-
         }
-    }
     else throw ApiError.badRequest(`Bad Data: ${data}`);
     return;
 })
@@ -81,9 +77,8 @@ export const getProjectById = asyncHandler( async (
     if(!isUUID.test(projectId)) throw ApiError.badRequest(`Invalid UUID: ${projectId}`);
     //query
     const project = await getProjectBy(projectId, req.user.id)
-    if(!project) throw ApiError.notFound(`Project with id ${projectId} was not found`);
+    if(!project) throw ApiError.badRequest(`Project with id ${projectId} was not found or is not your project`);
     //send response
-    if (project._id != req.user.id) throw ApiError.forbidden(`Not your Project`);
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,
@@ -96,10 +91,10 @@ export const getProjectsOfUser = asyncHandler( async (
     req: Request< { userId: string }, responseBody<projectDTO[]>, never >,
     res: Response<responseBody<projectDTO[]>>
 ) => {
-    const userId = req.user.id
+    const userId = req.params.userId === "1" ? req.user.id : req.params.userId;
     if(!isUUID.test(userId)) throw ApiError.badRequest(`Invalid UUID: ${userId}`);
+
     const projects: projectDTO[] = await getProjectFrom(userId);
-    // if (project._id != req.user.id) throw ApiError.forbidden(`Not your Project`);
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,

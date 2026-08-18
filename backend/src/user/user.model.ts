@@ -9,8 +9,13 @@ import {
     hashPassword,
     compareHashedPassword,
 } from '../middleware/hashPassword.js';
-import {ApiError, userDTO} from "@fullstack-lab/utils";
+import {
+    ApiError,
+    userDTO,
+    minimalUser
+} from "@fullstack-lab/utils";
 import {UserDocument} from "../database/index.js";
+// import {minimalUser} from "@fullstack-lab/utils/dist/types/index.js";
 
 export const logIn = async (username: string, password: string): Promise<userDTO> =>  {
     const user: UserDocument | null = await query.read.userByName(username);
@@ -38,4 +43,20 @@ export const getMeModel = async (username: string): Promise<userDTO | null> =>  
     const tmp: UserDocument | null = await query.read.userByName(username);
     if (!tmp) return tmp;
     return format.DocumentToDTO(tmp);
+}
+
+export const getUsersById = async (userIds: string[]): Promise<minimalUser[]> => {
+    const userDocs: UserDocument[] = await query.read.usersByIds(userIds)
+
+    const users: minimalUser[] = [];
+
+    userDocs.forEach( el => {
+        if (userIds.includes(el.id)){
+            users.push({id: el.id, username: el.username});
+        }
+    });
+
+    return users;
+
+
 }
