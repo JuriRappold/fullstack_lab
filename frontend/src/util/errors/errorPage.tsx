@@ -1,6 +1,5 @@
 import { useNavigate} from "react-router-dom";
 import { MyError } from "./MyError.ts";
-import { ApiError } from "@fullstack-lab/utils";
 
 interface ErrorProp<T extends Error>  {
     error: T,

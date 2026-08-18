@@ -1,10 +1,12 @@
 import {useAuth} from "../util/context/AuthContext.tsx";
-import {NavLink} from "react-router-dom";
-// import {BrokenComponent} from "./BrokenComponent.tsx";
 import {AuthExpiredError} from "../util/errors/AuthExpiredError.ts";
-import {CustomButton} from "../components";
-import type {CustomButtonHandle} from "../components/CustomButton.tsx";
+import {
+    Button,
+    type ButtonHandle,
+    NaviLink
+} from "../components";
 import {useRef} from "react";
+import  '../components/Links.css';
 
 export function Placeholder({ title }: { title: string}) {
     const { isAuthenticated, user, logout } = useAuth();
@@ -12,7 +14,7 @@ export function Placeholder({ title }: { title: string}) {
         // throw new Error("This Button causes an Error", {cause: "I'm stupid"})
         throw new AuthExpiredError(`Testing the AuthExpiredError`);
     };
-    const buttonRef = useRef<CustomButtonHandle>(null);
+    const buttonRef = useRef<ButtonHandle>(null);
 
     function handleDisable() {
         buttonRef.current?.disableButton();
@@ -21,6 +23,7 @@ export function Placeholder({ title }: { title: string}) {
     function handleEnable() {
         buttonRef.current?.enableButton();
     }
+
     return (
     <div style={{ padding: '48px 24px', maxWidth: '600px', margin: '0 auto' }}>
         <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.8rem', marginBottom: '12px', color: '#1a1a1a' }}>
@@ -42,34 +45,35 @@ export function Placeholder({ title }: { title: string}) {
         )}
         <a href="/" style={{ color: '#3d6e13', fontWeight: 600 }}>← Back to home</a>
         <ol>
-        <li><NavLink to="/">Landing Page</NavLink></li>
-        <li><NavLink to="/login">Login</NavLink></li>
-        <li><NavLink to="/register">Register</NavLink></li>
-        <li><NavLink to="/home">Home</NavLink></li>
-        <li><NavLink to="/projects/1">Project Display</NavLink></li>
-        <li><NavLink to="/projects/create">Create Project</NavLink></li>
-        <li><NavLink to="/projects/update/1">Edit Project</NavLink></li>
-        <li><NavLink to="/update/create">Create Update</NavLink></li>
-        <li><NavLink to="/update/1">Update Display</NavLink></li>
+            <li><NaviLink title={"Landing Page"} /></li>
+            <li><NaviLink to={{pathname: "/login"}} title={"Login"}/></li>
+            <li><NaviLink title={"Register"} to={{pathname: "/register"}} /></li>
+            <li><NaviLink title={"Home"} to={{pathname:"/home"}} /></li>
+            {/*<li><NaviLink to={"/home"} ></NaviLink></li>*/}
+            <li><NaviLink title={"Display Project"} to={{pathname: "/projects/1"}} /></li>
+            <li><NaviLink title={"Create Project"} to={{pathname: "/projects/create"}} /></li>
+            <li><NaviLink title={"Update Project"} to={{pathname: "/projects/update/1"}} /></li>
+            <li><NaviLink title={"Create Update"} to={{pathname: "/update/create"}} /></li>
+            <li><NaviLink title={"Display Update"} to={{pathname: "/update/1"}} /></li>
         </ol>
 
         <div style={{color: "red"}}>
             {/*<button onClick={stupid}>Cause Error</button>*/}
             {/*<BrokenComponent />*/}
-            <CustomButton ref={buttonRef} onPush={{pathname: "/projects/create"}}/> <br />
-            <p>
-                <div>
+            <Button ref={buttonRef} onPush={{pathname: "/projects/create"}}/> <br />
+            <div>
+                <p>
                     <button onClick={handleDisable}>
                         Disable
                     </button><br />
-                </div>
+                </p>
 
                 <p>
                     <button onClick={handleEnable}>
                         Enable
                     </button><br />
                 </p>
-            </p>
+            </div>
         </div>
     </div>
     )

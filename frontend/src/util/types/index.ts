@@ -16,3 +16,5 @@ export {
 
 export type { emptyObject } from './emptyObject.Type.ts';
 
+export type { toObject} from './toObject.ts';
+

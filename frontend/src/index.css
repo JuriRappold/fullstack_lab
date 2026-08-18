@@ -46,10 +46,11 @@ body{
 .safe{
     padding-inline: max(var(--gap), env(safe-area-inset-left, 0px));
     padding-inline-end: max(var(--gap), env(safe-area-inset-right, 0px));
-}
-.safe{
     padding-block: max(calc(var(--gap)*0.9, env(safe-area-inset-top,0px))) max(calc(var(--gap), env(safe-area-inset-bottom, 0+x)));
 }
+/*.safe{*/
+/*    padding-block: max(calc(var(--gap)*0.9, env(safe-area-inset-top,0px))) max(calc(var(--gap), env(safe-area-inset-bottom, 0+x)));*/
+/*}*/
 .pad{
     padding: 0;
 }
