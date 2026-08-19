@@ -16,7 +16,7 @@ import {
     type fullUser,
     type halfUser
 } from '../types/'
-import {MyError} from "../errors/MyError.ts";
+import {MyError} from "../errors";
 // KEYS
 const TOKEN_KEY = 'lab_token';
 
@@ -84,10 +84,10 @@ export default function AuthProvider( {children}: {children: ReactNode} ){
     useEffect(() => {
         const savedToken = localStorage.getItem(TOKEN_KEY);
 
-        if (!savedToken){
-            setLoading(false);
-            return;
-        }
+        // if (!savedToken){
+        //     setLoading(false);
+        //     return;
+        // }
 
         getMe(savedToken)
             .then( user => {

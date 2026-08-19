@@ -19,6 +19,10 @@ const userByName = async (username: string):Promise<UserDocument | null> => {
 const userById = async(userId: string): Promise<UserDocument | null> => {
     return UserModel.findById(userId);
 }
+
+const usersByIds = async (userIds: string[]): Promise<UserDocument[]> =>  {
+    return UserModel.find({_id: userIds}, 'username id');
+}
 /**
  * returns {_id: ObjectId} if document exists, otherwise it returns null
  * @param username
@@ -38,7 +42,8 @@ export const query = {
     read: {
         userByName,
         doesUserExist,
-        userById
+        userById,
+        usersByIds,
     },
 }
 

@@ -1,30 +1,40 @@
 import {
     ObjectId,
     ProjectData,
-    ProjectDocument
+    ProjectDocument,
 } from "../database/index.js";
-import { projectDTO } from "@fullstack-lab/utils";
+import {minimalProject, projectDTO} from "@fullstack-lab/utils";
 
-const DocumentToDTO = (queryResult: ProjectDocument) => {
+const DocumentToDTO = (queryResult: ProjectDocument): projectDTO => {
     return {
         title: queryResult.title,
         description: queryResult.description || "",
         status: queryResult.status,
-        owner_id: queryResult.owner_id.toString(),
-        contributors: queryResult.contributors.map( e => e.toString()),
-        _id: queryResult._id.toString() || ""
+        owner: {id: queryResult.owner_id.id, username: queryResult.owner_id.username},
+        contributors: queryResult.contributors.map(c => {
+            return {id: c.id, username: c.username}
+        }),
+        id: queryResult.id
     } satisfies projectDTO
 }
 const DTOToData = (proDTO: projectDTO): ProjectData => {
     return {
         title: proDTO.title,
         status: proDTO.status,
-        owner_id: new ObjectId(proDTO.owner_id),
-        contributors: proDTO.contributors.map( el => new ObjectId(el)),
+        owner_id: new ObjectId(proDTO.owner.id),
+        contributors: proDTO.contributors.map( el => new ObjectId(el.id)),
     } satisfies ProjectData
+}
+
+const DocToMinimal = (min: ProjectDocument): minimalProject => {
+    return {
+        id: min.id,
+        title: min.title
+    } satisfies minimalProject
 }
 
 export const format = {
     DocumentToDTO,
-    DTOToData
+    DTOToData,
+    DocToMinimal
 }

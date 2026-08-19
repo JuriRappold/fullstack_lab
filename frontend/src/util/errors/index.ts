@@ -4,4 +4,4 @@ export {ErrorBoundary} from "react-error-boundary";
 
 export { ErrorPage } from './errorPage.tsx';
 
-export { MyError } from './MyError.ts';
+export { MyError, type normalError } from './MyError.ts';

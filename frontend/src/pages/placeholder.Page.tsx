@@ -7,6 +7,7 @@ import {
 } from "../components";
 import {useRef} from "react";
 import  '../components/Links.css';
+import {NavLink} from "react-router-dom";
 
 export function Placeholder({ title }: { title: string}) {
     const { isAuthenticated, user, logout } = useAuth();

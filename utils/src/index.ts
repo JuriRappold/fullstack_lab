@@ -31,7 +31,25 @@ export {
     type updateDTO,
     type partialUpdateDTO,
     isUpdateDTO,
-    isPartialUpdateDTO
+    isPartialUpdateDTO,
+
+    type minimalUser,
+    isMinimalUser,
+    isMinimalUserArray,
+    isOptionalMinimalUser,
+    isOptionalMinimalUserArray,
+
+    type minimalProject,
+    isMinimalProject,
+    isMinimalProjectArray,
+    isOptionalMinimalProject,
+    isOptionalMinimalProjectArray,
+
+    type minimalUpdate,
+    isMinimalUpdate,
+    isMinimalUpdateArray,
+    isOptionalMinimalUpdate,
+    isOptionalMinimalUpdateArray,
 } from './types/index.js';
 
 export { ApiError } from './ApiError.js';

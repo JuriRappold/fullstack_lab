@@ -10,7 +10,8 @@ import {
     getProjectById,
     getProjectsOfUser,
     createNewProject,
-    deleteProjectById, updateProjectById
+    deleteProjectById,
+    updateProjectById
 } from './project.controller.js'
 import {authMiddleware} from "../middleware/authentication.js";
 

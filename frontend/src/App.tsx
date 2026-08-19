@@ -19,6 +19,7 @@ import {
   ErrorBoundary,
   ErrorPage
 } from "./util/errors";
+import {FetchTest} from "./pages/fetchTest.tsx";
 
 function AppRoutes(){
   return(
@@ -41,7 +42,8 @@ function AppRoutes(){
               <Placeholder title={"HOME"}/>
             }/>
             <Route path="/projects/:projectId" element={
-              <Placeholder title={"Project Display"}/>
+              // <Placeholder title={"Project Display"}/>
+                <FetchTest />
             }/>
             <Route path="/projects/create" element={
               <Placeholder title={"Project Create"}/>

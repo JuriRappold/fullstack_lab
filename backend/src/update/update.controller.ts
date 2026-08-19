@@ -59,8 +59,7 @@ export const readUpdateById = asyncHandler( async(
     res: Response<responseBody<updateDTO>>
 ) => {
     const updateId = req.params.updateId;
-    const userId = req.user.id
-    const result = await getUpdateById(updateId, userId);
+    const result = await getUpdateById(updateId, req.user.id);
     if (!result) throw ApiError.notFound(`No update with the id found`);
     res.status(httpOK.status).json({
         status: httpOK.status,
@@ -74,8 +73,7 @@ export const readUpdatesOfUser = asyncHandler( async(
     req: Request<never, responseBody<updateDTO[]>, never>,
     res: Response<responseBody<updateDTO[]>>
 ) => {
-    const userId = req.user.id;
-    const result = await getUpdateOfUser(userId);
+    const result = await getUpdateOfUser(req.user.id);
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,

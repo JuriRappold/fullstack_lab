@@ -113,10 +113,18 @@ export type UserData = InferSchemaType<typeof userSchema>;
 export type UserDocument = HydratedDocument< UserData >;
 
 export type ProjectData = InferSchemaType<typeof projectSchema>;
-export type ProjectDocument = HydratedDocument< ProjectData >;
+export type projectDocument = HydratedDocument< ProjectData >;
+export type ProjectDocument = Omit<projectDocument, 'owner_id' | 'contributors'> & {
+    owner_id: Pick<UserDocument, 'id' | 'username'>,
+    contributors: Pick<UserDocument, 'id' | 'username'>[],
+}
 
 export type UpdateData = InferSchemaType<typeof updateSchema>;
-export type UpdateDocument = HydratedDocument< UpdateData >;
+export type updateDocument = HydratedDocument< UpdateData >;
+export type UpdateDocument = Omit<updateDocument, 'project_id' | 'contributor'> & {
+    project_id: Pick<projectDocument, 'id' | 'title'>,
+    contributor_id: Pick<UserDocument, 'id' | 'username'>
+}
 
 export type OBJECT_ID = Schema.Types.ObjectId
 

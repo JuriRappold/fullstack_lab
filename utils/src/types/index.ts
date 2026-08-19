@@ -12,17 +12,44 @@ export {
 } from './http.codes.js'
 
 export {
+    type STATUS,
+    isStatus,
+    isOptionalStatus,
+
     type projectDTO,
     type partialProjectDTO,
-    isStatus,
     isProjectDTO,
     isPartialProjectDTO,
+
+    type minimalProject,
+    isMinimalProject,
+    isMinimalProjectArray,
+    isOptionalMinimalProject,
+    isOptionalMinimalProjectArray
+} from './project.DTO.js';
+
+export {
     type userDTO,
     type partialUserDTO,
     isPartialUserDTO,
     isUserDTO,
+
+    type minimalUser,
+    isMinimalUser,
+    isMinimalUserArray,
+    isOptionalMinimalUser,
+    isOptionalMinimalUserArray,
+} from './user.DTO.js';
+
+export {
     type updateDTO,
     type partialUpdateDTO,
     isUpdateDTO,
-    isPartialUpdateDTO
-} from './dataTransferObjects.js'
+    isPartialUpdateDTO,
+
+    type minimalUpdate,
+    isMinimalUpdate,
+    isMinimalUpdateArray,
+    isOptionalMinimalUpdate,
+    isOptionalMinimalUpdateArray,
+} from './update.DTO.js';

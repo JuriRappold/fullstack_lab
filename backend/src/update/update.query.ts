@@ -29,7 +29,7 @@ async function checkIfAllowed(projectId: string, userId: string): Promise<boolea
 async function addContributor(projectId: string, userId: string) {
     return ProjectModel.findOneAndUpdate(
         {
-        _id: projectId,
+            id: projectId,
         },
         {
             $addToSet: {
@@ -53,13 +53,13 @@ async function addContributor(projectId: string, userId: string) {
  * @param newData
  * @param userId
  */
-async function newUpdate(newData: UpdateData, userId: string): Promise<UpdateDocument | null> {
+async function newUpdate(newData: UpdateData, userId: string): Promise<UpdateDocument | null> { //
     const projectId = newData.project_id.toString();
     if( ! (await checkIfAllowed( projectId, userId)) ){
         const result = await addContributor(projectId, userId);
         if(!result) return null;
     }
-    return UpdateModel.create(newData);
+    return (await (await UpdateModel.create(newData)).populate('project_id', 'id title')).populate('contributor', 'id username');
 }
 
 /*
@@ -67,20 +67,22 @@ async function newUpdate(newData: UpdateData, userId: string): Promise<UpdateDoc
  */
 async function getUpdatesOfProject(projectId: string, userId: string): Promise<UpdateDocument[] | null> {
     if(await checkIfAllowed(projectId, userId)) {
-        return UpdateModel.find({project_id: projectId})
+        //@ts-ignore
+        return UpdateModel.find({project_id: projectId}).populate('project_id', 'id title').populate('contributor_id', 'id username');
     }
-    // else throw ApiError.forbidden(`Contribute to the Project First`);
     return null;
 }
 async function getUpdateById( updateId: string, userId: string): Promise<UpdateDocument | null> {
-    const tmp = await UpdateModel.findById(updateId);
+    const tmp = await UpdateModel.findById(updateId).populate('project_id', 'id title').populate('contributor_id', 'id username');
     if(tmp && await checkIfAllowed(tmp.project_id.toString(), userId)) {
+        //@ts-ignore
         return tmp;
     }
     else throw ApiError.forbidden(`Contribute to the Project First`);
 }
 async function getUpdateOfUser( userId: string ): Promise<UpdateDocument[]> {
-    return UpdateModel.find({contributor_id: userId});
+    //@ts-ignore
+    return UpdateModel.find({contributor_id: userId}).populate('project_id', 'id title').populate('contributor_id', 'id username');
 }
 
 export const query = {

@@ -14,6 +14,7 @@ export function ErrorPage({error, onReset}: ErrorProp){
             navigate(error.reRoute);
         }
         else { navigate('/') }
+        // navigate('/');
     }
     return (
         <>

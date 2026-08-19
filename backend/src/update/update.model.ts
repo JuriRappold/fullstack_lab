@@ -12,8 +12,7 @@ import {UpdateDocument} from "../database/index.js";
  */
 export const createUpdate = async (newData: updateDTO, userId: string): Promise<updateDTO | null> => {
     const update: UpdateDocument | null = await query.create.newUpdate( format.DTOtoData(newData), userId );
-    if (!update) return null; // DB error
-    return format.DocumentToDTO(update);
+    return update ? format.DocumentToDTO(update) : null;
 }
 
 /**
@@ -39,8 +38,7 @@ export const getUpdatesOfProject = async (projectId: string, userId: string): Pr
  */
 export const getUpdateById = async ( updateId: string, userId: string): Promise<updateDTO | null> => {
     const update: UpdateDocument | null = await query.read.getUpdateById(updateId, userId);
-    if(!update) return null;
-    return format.DocumentToDTO(update);
+    return update ? format.DocumentToDTO(update) : null;
 }
 
 export const getUpdateOfUser = async ( userId: string): Promise<updateDTO[]> => {

@@ -1,6 +1,6 @@
 import {
-    BASE
-} from "../constants/URLs.ts";
+    userURL
+} from "../constants";
 import {
     type fullUser,
     RequestObject
@@ -13,7 +13,6 @@ import {
 } from '@fullstack-lab/utils';
 import {MyError} from "../errors";
 
-const userURL = `${BASE}/user` as const;
 
 async function getData(res: Response): Promise<fullUser>{
     const json: responseBody<fullUser> | responseError = await res.json(); //
