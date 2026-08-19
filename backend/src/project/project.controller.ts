@@ -78,7 +78,9 @@ export const getProjectById = asyncHandler( async (
     //query
     const project = await getProjectBy(projectId, req.user.id)
     if(!project) throw ApiError.badRequest(`Project with id ${projectId} was not found or is not your project`);
+    if(Array.isArray(project)) throw ApiError.internal(`Project is an Array...`);
     //send response
+    // console.log(project);
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,

@@ -13,7 +13,7 @@ router.use(authMiddleware);
 /*
 POST `/api/update/:projectId`
  */
-router.post('/:projectId', checkID, newUpdate);
+router.post('/create', checkID, newUpdate);
 /*
 GET `/api/update/project/:projectId`
 GET `/api/update/update/:updateId`

@@ -18,11 +18,7 @@ export class MyError extends Error{
     readonly text: string;
     readonly name: string;
     readonly reRoute: string;
-    constructor(error:
-        normalError
-        | responseError
-        | Error
-    ){
+    constructor(error: unknown){
         let normal = error;
         if(!MyError.isMyError(normal) ){
             if(isResponseError(normal)){

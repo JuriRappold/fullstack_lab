@@ -86,7 +86,7 @@ export class RequestObject<T> {
         }
         else return headers;
     }
-    static defaultHeaders(token: string): RequestHeaders {
+    static defaultHeaders(token: string ): RequestHeaders {
         return {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`

@@ -7,6 +7,7 @@ export type fetchObj = {
 
 export type fetchProps = {
     method: RequestMethod,
-    url: string
+    url?: string,
+    token: string
 }
 

@@ -10,8 +10,10 @@ const DocumentToDTO = (queryResult: ProjectDocument): projectDTO => {
         title: queryResult.title,
         description: queryResult.description || "",
         status: queryResult.status,
-        owner: queryResult.owner_id,
-        contributors: queryResult.contributors,
+        owner: {id: queryResult.owner_id.id, username: queryResult.owner_id.username},
+        contributors: queryResult.contributors.map(c => {
+            return {id: c.id, username: c.username}
+        }),
         id: queryResult.id
     } satisfies projectDTO
 }
