@@ -1,4 +1,8 @@
-export { type responseBody } from './response.shape.js';
+export {
+    type responseBody,
+    type responseError,
+    isResponseError,
+} from './response.shape.js';
 export { type requestBody } from './request.shape.js';
 
 export {
@@ -13,6 +17,7 @@ export {
     httpUnauthorized, //401
     type httpCode,
 
+    type STATUS,
     isStatus,
     type projectDTO,
     type partialProjectDTO,
@@ -27,7 +32,25 @@ export {
     type updateDTO,
     type partialUpdateDTO,
     isUpdateDTO,
-    isPartialUpdateDTO
+    isPartialUpdateDTO,
+
+    type minimalUser,
+    isMinimalUser,
+    isMinimalUserArray,
+    isOptionalMinimalUser,
+    isOptionalMinimalUserArray,
+
+    type minimalProject,
+    isMinimalProject,
+    isMinimalProjectArray,
+    isOptionalMinimalProject,
+    isOptionalMinimalProjectArray,
+
+    type minimalUpdate,
+    isMinimalUpdate,
+    isMinimalUpdateArray,
+    isOptionalMinimalUpdate,
+    isOptionalMinimalUpdateArray,
 } from './types/index.js';
 
 export { ApiError } from './ApiError.js';

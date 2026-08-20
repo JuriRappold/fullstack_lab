@@ -1,0 +1,19 @@
+.title{
+}
+.description {
+}
+
+.fullWarning {
+    /*display: none;*/
+    font-size: 1rem;
+    margin: .25rem;
+    color: red;
+    wrap-after: auto;
+}
+span {
+    font-size: .8rem;
+}
+
+#descriptionInput {
+
+}

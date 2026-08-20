@@ -1,0 +1,11 @@
+.link {
+    text-decoration: none;
+    color: var(--text);
+}
+.active {
+    color: orange;
+}
+
+.pending {
+    color: #0d6efd;
+}

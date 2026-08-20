@@ -10,5 +10,6 @@ export type {
     ProjectDocument,
     UpdateData,
     UpdateDocument,
-    OBJECT_ID, } from './schema.js';
+    OBJECT_ID,
+} from './schema.js';
 export { ObjectId } from "mongodb";

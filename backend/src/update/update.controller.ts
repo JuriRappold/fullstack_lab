@@ -1,8 +1,3 @@
-// import {
-//     createUpdate,
-//     getUpdatesFromProject,
-//     getUpdateById
-// } from './update.model.js';
 import {asyncHandler} from "../middleware/asyncHandler.js";
 import {
     Request,
@@ -21,7 +16,8 @@ import {
 import {
     createUpdate,
     getUpdateById,
-    getUpdatesOfProject
+    getUpdatesOfProject,
+    getUpdateOfUser
 } from './update.model.js'
 
 
@@ -63,13 +59,25 @@ export const readUpdateById = asyncHandler( async(
     res: Response<responseBody<updateDTO>>
 ) => {
     const updateId = req.params.updateId;
-    const userId = req.user.id
-    const result = await getUpdateById(updateId, userId);
+    const result = await getUpdateById(updateId, req.user.id);
     if (!result) throw ApiError.notFound(`No update with the id found`);
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,
         data: result
     } satisfies responseBody<updateDTO>)
+    return;
+})
+
+export const readUpdatesOfUser = asyncHandler( async(
+    req: Request<never, responseBody<updateDTO[]>, never>,
+    res: Response<responseBody<updateDTO[]>>
+) => {
+    const result = await getUpdateOfUser(req.user.id);
+    res.status(httpOK.status).json({
+        status: httpOK.status,
+        message: httpOK.message,
+        data: result
+    } satisfies responseBody<updateDTO[]>);
     return;
 })

@@ -4,12 +4,10 @@ PURPOSE:
 */
 import {
     ProjectModel,
-    ProjectDocument,
+    ProjectDocument, ProjectData
 } from '../database/index.js';
 import {
-    ApiError,
     type partialProjectDTO,
-    type projectDTO,
 } from '@fullstack-lab/utils';
 
 /*
@@ -20,9 +18,8 @@ import {
 	- returns 400 if no/insufficient req. body
 	- returns 409 if project title not unique
 */
-async function newProject(newProject: projectDTO): Promise<ProjectDocument> {
-    if (newProject._id) throw ApiError.badRequest('Remove ID');
-    return await ProjectModel.create(newProject);
+async function newProject(newProject: ProjectData): Promise<ProjectDocument> {
+    return (await (await ProjectModel.create(newProject)).populate('owner_id', '_id username')).populate('contributors', '_id username');
 }
 
 
@@ -37,12 +34,26 @@ async function newProject(newProject: projectDTO): Promise<ProjectDocument> {
 - returns 400 if invalid id
  */
 async function projectById(projectId: string, userId: string): Promise<ProjectDocument | null> {
-    return await checkProjectOwnerShip(projectId, userId)
+    //@ts-ignore
+    return ProjectModel.findOne({_id: projectId}).populate('owner_id', 'id username').populate('contributors', 'id username');
 }
 
 async function projectsFrom(userId: string): Promise< ProjectDocument[] > {
-    return ProjectModel.find({owner_id: userId});
+    //@ts-ignore
+    return ProjectModel.find({owner_id: userId}).populate('owner_id', 'id username').populate('contributors', 'id username');
 }
+
+async function projectsByIds(projectIds: string[], userId: string): Promise<ProjectDocument[]> {
+    //@ts-ignore
+    return ProjectModel.find({
+            id: projectIds,
+            $or: [
+                {owner_id: userId},
+                {contributors: userId}
+            ]
+    }).populate('owner_id', 'id username').populate('contributors', 'id username');
+}
+
 /*
 **UPDATE**
 - PATCH `/api/projects/:id`
@@ -51,14 +62,16 @@ async function projectsFrom(userId: string): Promise< ProjectDocument[] > {
 	- returns 400 if no/insufficient req. body
 	- returns 400 if invalid id
  */
-async function updateProject(projectId: string, newData: partialProjectDTO, userId: string) {//: Promise< ProjectDocument >
-    if( await checkProjectOwnerShip(projectId, userId) ){
-        const result = await ProjectModel.updateOne({_id: projectId}, newData);
-        if(result.acknowledged){
-            return ProjectModel.findById(projectId);
-        }
-        else return null;
-    }
+async function updateProject(projectId: string, newData: partialProjectDTO, userId: string): Promise< ProjectDocument | null > {//: Promise< ProjectDocument >
+    // if( await checkProjectOwnerShip(projectId, userId) ){
+    //     const result = await ProjectModel.updateOne({_id: projectId}, newData);
+    //     if(result.acknowledged){
+    //         return ProjectModel.findById(projectId);
+    //     }
+    //     else return null;
+    // }
+    //@ts-ignore
+    return ProjectModel.updateOne({id: projectId, $or: [{owner_id: userId}, {contributors: userId}]}, newData).populate('owner_id', 'id username').populate('contributors', 'id username');
 }
 
 
@@ -72,15 +85,14 @@ async function updateProject(projectId: string, newData: partialProjectDTO, user
 	* : Promise<number>
  */
 async function deleteById(projectId: string, userId: string) {
-    if( await checkProjectOwnerShip(projectId, userId) ) return ProjectModel.deleteOne({_id: projectId});
-    return { acknowledged: false };
+    return ProjectModel.deleteOne({id: projectId, $or: [{owner_id: userId}, {contributors: userId}]}).populate('owner_id', 'id username').populate('contributors', 'id username');
 }
-async function checkProjectOwnerShip(projectId: string, userId: string) {
-    const project = await ProjectModel.findById(projectId);
-    if(!project) return null;//throw ApiError.notFound(`Project not found`);
-    if (project.owner_id.toString() != userId) throw ApiError.forbidden(`Not your project`);
-    return project;
-}
+// async function checkProjectOwnerShip(projectId: string, userId: string) {
+//     const project = await ProjectModel.findById(projectId);
+//     if(!project) return null;//throw ApiError.notFound(`Project not found`);
+//     if (project.owner_id.toString() != userId) throw ApiError.forbidden(`Not your project`);
+//     return project;
+// }
 
 export const query = {
     create: {
@@ -89,6 +101,7 @@ export const query = {
     read: {
         projectById,
         projectsFrom,
+        projectsByIds
     },
     update: {
         updateProject

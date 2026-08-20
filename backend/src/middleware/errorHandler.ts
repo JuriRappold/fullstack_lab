@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import { ApiError } from "@fullstack-lab/utils";
+import {ApiError, httpUnauthorized, type responseError} from "@fullstack-lab/utils";
+import {JsonWebTokenError} from "jsonwebtoken";
 
 /**
  * Global error handler middleware.
@@ -18,7 +19,14 @@ export function errorHandler(
         res.status(err.statusCode).json({
             error: err.message,
             statusCode: err.statusCode,
-        });
+        } satisfies responseError);
+        return;
+    }
+    if( err.name === "JsonWebTokenError"){
+        res.status(httpUnauthorized.status).json({
+            error: err.message,
+            statusCode: httpUnauthorized.status
+        }satisfies responseError)
         return;
     }
 
@@ -27,5 +35,5 @@ export function errorHandler(
     res.status(500).json({
         error: 'Internal server error',
         statusCode: 500,
-    });
+    } satisfies responseError);
 }

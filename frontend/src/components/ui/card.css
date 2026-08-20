@@ -1,0 +1,26 @@
+.card {
+    border-radius: .75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    text-decoration: none;
+    margin: .25rem;
+    border-color: #aa3bff;
+
+    h3 {
+        color: #0d6efd;
+        margin-right: .5rem;
+        margin-left: .5rem;
+    }
+    text {
+        /*align-self: center;*/
+        color: red;
+    }
+    .status {
+        color: green;
+    }
+
+    label {
+        color: black
+    }
+}

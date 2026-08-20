@@ -3,7 +3,8 @@ import {ApiError, httpCreated, httpOK, requestBody, responseBody, userDTO} from 
 import {Request, Response} from 'express';
 import {
     register,
-    logIn
+    logIn,
+    getMeModel
 } from "./user.model.js";
 import {format} from "./user.utils.js";
 
@@ -36,4 +37,18 @@ export const logInUser = asyncHandler( async (
         message: httpOK.message,
         data: result
     } satisfies responseBody<userDTO>)
+})
+
+export const getMe = asyncHandler( async (
+    req: Request<never, responseBody<userDTO>, never>,
+    res: Response<responseBody<userDTO>>
+) => {
+    console.log(req.user);
+    const user = await getMeModel(req.user.username);
+    if(!user) throw ApiError.internal(`Something went wrong while fetching the user`);
+    res.status(httpOK.status).json({
+        status: httpOK.status,
+        message: httpOK.message,
+        data: user
+    } satisfies responseBody<userDTO>);
 })

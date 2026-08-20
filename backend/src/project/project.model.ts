@@ -4,14 +4,10 @@ PURPOSE:
 - transforms queries into DTO
 - check if id is a valid UUID
  */
-import { query } from "./project.query.js";
-import {
-    partialProjectDTO,
-    projectDTO,
-} from '@fullstack-lab/utils'
-import {
-    format,
-} from './project.utils.js'
+import {query} from "./project.query.js";
+import {minimalProject, partialProjectDTO, projectDTO,} from '@fullstack-lab/utils'
+import {format,} from './project.utils.js'
+import {ProjectDocument} from "../database/index.js";
 
 
 /*
@@ -23,8 +19,9 @@ import {
 	- returns 409 if project title not unique
 */
 export const createProject = async (newProject: projectDTO): Promise<projectDTO> => {
-    const success = await query.create.newProject(newProject);
-    return format.DocumentToDTO(success);
+    const result = await query.create.newProject(format.DTOToData(newProject));
+    return format.DocumentToDTO(result);
+
 }
 
 
@@ -39,16 +36,19 @@ export const createProject = async (newProject: projectDTO): Promise<projectDTO>
 - returns 200
 - returns 400 if invalid id
  */
+// const unAuth = -1 as const;
 
-export const getProjectBy = async (projectId: string, userId: string): Promise<projectDTO | null> => {
+export const getProjectBy = async (projectId: string, userId: string): Promise<projectDTO | null | -1> => {
     const project = await query.read.projectById(projectId, userId);
     if(!project) return null;
-    else {
-        return format.DocumentToDTO(project);
+    if(project.owner_id.id !== userId) return -1;
+    if(project.contributors.filter(el => el.id === userId).length === 0){
+        return -1;
     }
+    return format.DocumentToDTO(project);
 }
 export const getProjectFrom = async (userId: string): Promise<projectDTO[]> => {
-    const projects = await query.read.projectsFrom(userId);
+    const projects: ProjectDocument[] = await query.read.projectsFrom(userId);
     return projects.map(format.DocumentToDTO);
 }
 
@@ -60,8 +60,10 @@ export const delProjectId = async (projectId: string, userId: string): Promise<b
 
 export const updateProById = async (projectId: string, newData: partialProjectDTO, userId: string) => {
     const result = await query.update.updateProject(projectId, newData, userId);
-    if(!result) return result;
-    else{
-        return format.DocumentToDTO(result);
-    }
+    return result ? format.DocumentToDTO(result) : result;
+}
+
+export const getMinimalProjects = async (projectIds: string[], userId: string): Promise<minimalProject[]> => {
+    const minProjects: ProjectDocument[] = await query.read.projectsByIds(projectIds, userId);
+    return minProjects.map(format.DocToMinimal);
 }
