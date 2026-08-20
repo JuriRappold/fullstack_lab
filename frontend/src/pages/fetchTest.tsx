@@ -1,13 +1,17 @@
 import {useEffect, useState} from "react";
-import {Button} from '../components';
+import {Button} from '../components/ui';
 import {getProjectById, getProjectsByUser} from '../util/apiCalls/project.Call.ts'
 
 import type {projectDTO, responseError} from "@fullstack-lab/utils";
+import {Card} from "../components/ui/Card.tsx";
+import {useParams} from "react-router-dom";
+import {miniToEntity} from "../util/formatting.ts";
 const projectID = "6a7f129c03ad55a462a667df";
 const userID = "6a7f129c03ad55a462a667d7";
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsaWNlIiwiaWQiOiI2YTdmMTI5YzAzYWQ1NWE0NjJhNjY3ZDciLCJpYXQiOjE3ODcwNzE0MTQsImV4cCI6MTc4NzY3NjIxNH0.ArDXCo1Wf6mnF0AZ-Rmk846kfx_x4jK7idvzc-2Q7cY"
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNoYXJsaWUiLCJpZCI6IjZhN2YxMjljMDNhZDU1YTQ2MmE2NjdkOSIsImlhdCI6MTc4NzE2NTc5MSwiZXhwIjoxNzg3NzcwNTkxfQ.57psFqyyQ_OT4uVpvymAhiHp2QPKIQnOFHt7BDgUsH8"
 export function FetchTest(){
     // const {token} = useAuth();
+    const {projectId} = useParams();
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<projectDTO>();
     const [error, setError] = useState<responseError | Error>();
@@ -15,9 +19,10 @@ export function FetchTest(){
         async function loadProjectById() {
             if(!token) return;
             try{
-                const project = await getProjectsByUser(userID, token);
-                setData(project[0]);
-                console.log(project);
+                const project = await getProjectById(projectId ?? projectID, token);
+                if('error' in project) setError(project);
+                setData(project);
+
             } catch (err) {
                 setError(err);
             } finally {
@@ -25,7 +30,7 @@ export function FetchTest(){
             }
         }
         loadProjectById()
-    }, []);
+    }, [projectId]);
     if(loading){
         return (
             <>
@@ -35,7 +40,7 @@ export function FetchTest(){
         )
     }
     else {
-        if(data) {
+        if(data && !error) {
             return (
                 <>
                     <div id={data.id}>
@@ -43,14 +48,17 @@ export function FetchTest(){
                         <p>{data.description}</p>
                         <div id={data.owner.id}>Owner: {data.owner.username}</div>
                         <div>Contributors:</div>
-                        <ul>
-                            {data.contributors.map(c => <li key={c.id}>{c.username}</li>)}
-                        </ul>
+                        {/*<ul>*/}
+                        {/*    {data.contributors.map(c => <li key={c.id}>{c.username}</li>)}*/}
+                        {/*</ul>*/}
+                        {data.contributors.map(c => <Card data={miniToEntity(c)} key={c.id}/> )
+                        }
                     </div>
                     <Button text={"Home"}/>
                 </>
             )
         }
-        else throw new Error("Data is null", {cause: "fetching data was unsuccessful"});
+        else if(error) throw new Error(error.toString());
+        else throw new Error("Data is null", {cause: `${data}`});
     }
 }

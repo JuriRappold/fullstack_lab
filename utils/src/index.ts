@@ -17,6 +17,7 @@ export {
     httpUnauthorized, //401
     type httpCode,
 
+    type STATUS,
     isStatus,
     type projectDTO,
     type partialProjectDTO,

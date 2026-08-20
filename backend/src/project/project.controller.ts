@@ -77,7 +77,8 @@ export const getProjectById = asyncHandler( async (
     if(!isUUID.test(projectId)) throw ApiError.badRequest(`Invalid UUID: ${projectId}`);
     //query
     const project = await getProjectBy(projectId, req.user.id)
-    if(!project) throw ApiError.badRequest(`Project with id ${projectId} was not found or is not your project`);
+    if(!project) throw ApiError.notFound(`Project with id ${projectId} was not found`);
+    if(project === -1) throw ApiError.forbidden(`Is not your project!`);
     if(Array.isArray(project)) throw ApiError.internal(`Project is an Array...`);
     //send response
     // console.log(project);

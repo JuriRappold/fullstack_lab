@@ -10,7 +10,7 @@ type ButtonProp = {
 
 import type{
     toObject,
-} from '../util/types';
+} from '../../util/types';
 
 export type ButtonHandle = {
     enableButton: () => void;
@@ -64,7 +64,7 @@ export const Button = ({ ref, text, onPush, disable }: ButtonProp ) => {
         }
 
         return (
-            <Link className={classes.join(" ")} to={myPush}>
+            <Link className={classes.join(" ")} to={myPush} replace={true}>
                 {myText}
             </Link>
         );

@@ -20,6 +20,8 @@ import {
   ErrorPage
 } from "./util/errors";
 import {FetchTest} from "./pages/fetchTest.tsx";
+import {Card} from "./components/ui/Card.tsx";
+import {User} from "./pages/userTemp.tsx";
 
 function AppRoutes(){
   return(
@@ -56,6 +58,9 @@ function AppRoutes(){
             }/>
             <Route path="/update/:updateId" element={
               <Placeholder title={"Update Display"}/>
+            }/>
+            <Route path={"/user/:userId"} element={
+              <User />
             }/>
           </Routes>
         </main>

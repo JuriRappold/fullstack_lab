@@ -5,7 +5,7 @@ import './Links.css'
 import { useState} from "react";
 import type {
     toObject
-} from '../util/types';
+} from '../../util/types';
 
 type LinkProps = {
     title: string,
@@ -35,7 +35,7 @@ export function NaviLink({title, to}: LinkProps){
 
     return (
         <>
-            <NavLink to={link} className={classes.join(" ")} >{text}</NavLink>
+            <NavLink to={link} className={classes.join(" ")} replace={true} >{text}</NavLink>
         </>
     )
 

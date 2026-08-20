@@ -36,10 +36,16 @@ export const createProject = async (newProject: projectDTO): Promise<projectDTO>
 - returns 200
 - returns 400 if invalid id
  */
+// const unAuth = -1 as const;
 
-export const getProjectBy = async (projectId: string, userId: string): Promise<projectDTO | null> => {
+export const getProjectBy = async (projectId: string, userId: string): Promise<projectDTO | null | -1> => {
     const project = await query.read.projectById(projectId, userId);
-    return project ? format.DocumentToDTO(project) : project;
+    if(!project) return null;
+    if(project.owner_id.id !== userId) return -1;
+    if(project.contributors.filter(el => el.id === userId).length === 0){
+        return -1;
+    }
+    return format.DocumentToDTO(project);
 }
 export const getProjectFrom = async (userId: string): Promise<projectDTO[]> => {
     const projects: ProjectDocument[] = await query.read.projectsFrom(userId);

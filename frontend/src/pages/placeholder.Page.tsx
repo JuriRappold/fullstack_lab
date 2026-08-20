@@ -3,11 +3,30 @@ import {AuthExpiredError} from "../util/errors/AuthExpiredError.ts";
 import {
     Button,
     type ButtonHandle,
-    NaviLink
-} from "../components";
+    NaviLink,
+    BigTextbox,
+    SmallTextbox,
+    DropDown
+} from "../components/ui";
 import {useRef} from "react";
-import  '../components/Links.css';
-import {NavLink} from "react-router-dom";
+import  '../components/ui/Links.css';
+import {Card} from "../components/ui/Card.tsx";
+import {Link} from "react-router-dom";
+import {Linki} from "../components/ui/Linki.tsx";
+import {Lists} from "../components/ui/Lists.tsx";
+import type {minEntity} from "../util/formatting.ts";
+import type {projectDTO} from "@fullstack-lab/utils";
+const daTa: Required<projectDTO> = {
+    title: "Weather Dashboard",
+    description: "A dashboard displaying current and forecasted weather data.",
+    status: "DESIGN",
+    id: "6a7f129c03ad55a462a667dd",
+    owner: { id: "6a7f129c03ad55a462a667d7", username: "alice" },
+    contributors: [
+        { id: "6a7f129c03ad55a462a667d8", username: "bob" },
+        { id: "6a7f129c03ad55a462a667d9", username: "charlie" }
+    ]
+}
 
 export function Placeholder({ title }: { title: string}) {
     const { isAuthenticated, user, logout } = useAuth();
@@ -44,38 +63,32 @@ export function Placeholder({ title }: { title: string}) {
         </button>
         </div>
         )}
-        <a href="/" style={{ color: '#3d6e13', fontWeight: 600 }}>← Back to home</a>
-        <ol>
-            <li><NaviLink title={"Landing Page"} /></li>
-            <li><NaviLink to={{pathname: "/login"}} title={"Login"}/></li>
-            <li><NaviLink title={"Register"} to={{pathname: "/register"}} /></li>
-            <li><NaviLink title={"Home"} to={{pathname:"/home"}} /></li>
-            {/*<li><NaviLink to={"/home"} ></NaviLink></li>*/}
-            <li><NaviLink title={"Display Project"} to={{pathname: "/projects/1"}} /></li>
-            <li><NaviLink title={"Create Project"} to={{pathname: "/projects/create"}} /></li>
-            <li><NaviLink title={"Update Project"} to={{pathname: "/projects/update/1"}} /></li>
-            <li><NaviLink title={"Create Update"} to={{pathname: "/update/create"}} /></li>
-            <li><NaviLink title={"Display Update"} to={{pathname: "/update/1"}} /></li>
-        </ol>
+        {/*<ol>*/}
+        {/*    <li><NaviLink title={"Landing Page"} /></li>*/}
+        {/*    <li><NaviLink to={{pathname: "/login"}} title={"Login"}/></li>*/}
+        {/*    <li><NaviLink title={"Register"} to={{pathname: "/register"}} /></li>*/}
+        {/*    <li><NaviLink title={"Home"} to={{pathname:"/home"}} /></li>*/}
+        {/*    /!*<li><NaviLink title={"Display Project"} to={{pathname: "/projects/1"}} /></li>*!/*/}
+        {/*    <li><NaviLink title={"Create Project"} to={{pathname: "/projects/create"}} /></li>*/}
+        {/*    /!*<li><NaviLink title={"Update Project"} to={{pathname: "/projects/update/1"}} /></li>*!/*/}
+        {/*    <li><NaviLink title={"Create Update"} to={{pathname: "/update/create"}} /></li>*/}
+        {/*    /!*<li><NaviLink title={"Display Update"} to={{pathname: "/update/1"}} /></li>*!/*/}
+        {/*</ol>*/}
 
-        <div style={{color: "red"}}>
-            {/*<button onClick={stupid}>Cause Error</button>*/}
-            {/*<BrokenComponent />*/}
-            <Button ref={buttonRef} onPush={{pathname: "/projects/create"}}/> <br />
-            <div>
-                <p>
-                    <button onClick={handleDisable}>
-                        Disable
-                    </button><br />
-                </p>
-
-                <p>
-                    <button onClick={handleEnable}>
-                        Enable
-                    </button><br />
-                </p>
-            </div>
-        </div>
+        {/*<div>*/}
+        {/*    <Card data={*/}
+        {/*        {*/}
+        {/*            type: "projects",*/}
+        {/*            id: daTa.id,*/}
+        {/*            text: daTa.title,*/}
+        {/*            status: daTa.status*/}
+        {/*        }*/}
+        {/*    }  />*/}
+        {/*</div>*/}
+        {/*<Linki text={"Link"} to={"/hell"} />*/}
+        {/*<SmallTextbox />*/}
+        <BigTextbox />
+        <DropDown />
     </div>
     )
 }

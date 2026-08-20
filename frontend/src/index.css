@@ -54,3 +54,8 @@ body{
 .pad{
     padding: 0;
 }
+fieldset {
+    border-radius: .75rem;
+    margin: .5rem;
+}
+
