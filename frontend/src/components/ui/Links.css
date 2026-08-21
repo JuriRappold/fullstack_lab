@@ -1,7 +1,14 @@
 .link {
     text-decoration: none;
-    color: var(--text);
+    /*color: var(--text);*/
+    color: var(--brand);
+    padding: .5rem;
+    margin: .25rem;
 }
+.link:hover {
+    color: var(--muted)
+}
+
 .active {
     color: orange;
 }

@@ -59,30 +59,31 @@ async function newUpdate(newData: UpdateData, userId: string): Promise<UpdateDoc
         const result = await addContributor(projectId, userId);
         if(!result) return null;
     }
-    return (await (await UpdateModel.create(newData)).populate('project_id', 'id title')).populate('contributor', 'id username');
+    return (await (await UpdateModel.create(newData)).populate('project_id', 'id title  status')).populate('contributor', 'id username');
 }
 
 /*
 **READ**
  */
 async function getUpdatesOfProject(projectId: string, userId: string): Promise<UpdateDocument[] | null> {
-    if(await checkIfAllowed(projectId, userId)) {
+    // if(await checkIfAllowed(projectId, userId)) {
         //@ts-ignore
-        return UpdateModel.find({project_id: projectId}).populate('project_id', 'id title').populate('contributor_id', 'id username');
-    }
-    return null;
+        return UpdateModel.find({project_id: projectId}).populate('project_id', 'id title  status').populate('contributor_id', 'id username');
+    // }
+    // return null;
 }
 async function getUpdateById( updateId: string, userId: string): Promise<UpdateDocument | null> {
-    const tmp = await UpdateModel.findById(updateId).populate('project_id', 'id title').populate('contributor_id', 'id username');
-    if(tmp && await checkIfAllowed(tmp.project_id.toString(), userId)) {
-        //@ts-ignore
-        return tmp;
-    }
-    else throw ApiError.forbidden(`Contribute to the Project First`);
+    const tmp = await UpdateModel.findById(updateId).populate('project_id', 'id title status').populate('contributor_id', 'id username');
+    // if(tmp && await checkIfAllowed(tmp.project_id._id.toString(), userId)) {
+    //     //@ts-ignore
+    //     return tmp;
+    // }
+    // else throw ApiError.forbidden(`Contribute to the Project First`);
+    return tmp;
 }
 async function getUpdateOfUser( userId: string ): Promise<UpdateDocument[]> {
     //@ts-ignore
-    return UpdateModel.find({contributor_id: userId}).populate('project_id', 'id title').populate('contributor_id', 'id username');
+    return UpdateModel.find({contributor_id: userId}).populate('project_id', 'id title  status').populate('contributor_id', 'id username');
 }
 
 export const query = {

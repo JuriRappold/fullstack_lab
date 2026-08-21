@@ -8,6 +8,7 @@ import {
 } from '../types';
 import {MyError, type normalError} from "../errors";
 import type {projectDTO, responseError} from "@fullstack-lab/utils";
+import {ApiResponseError} from "../errors/ApiResponseError.ts";
 type callProjectProps = fetchProps & {
     projectId?: string,
     userId?: string,
@@ -51,11 +52,17 @@ function getFetchObject({ method, token, projectId, userId, requestData}: callPr
     return fetchObject;
 }
 
-export async function getProjectById(projectId: string, toke: string): Promise<projectDTO| responseError>{
+export async function getProjectById(projectId: string, toke: string): Promise<projectDTO>{
     const obj = getFetchObject({method: "GET", token: toke, projectId});
     const response = await fetch(obj.url, obj.requestObj);
     const json = await response.json();
-    if(!response.ok) return json;
+    if(!response.ok) throw new ApiResponseError(json);
+    // {
+    //     const e = new Error(json.error, {cause: json.statusCode});
+    //     e.name = "ApiError";
+    //     // console.log(e);
+    //     throw e;
+    // }
     if(Array.isArray(json.data)) json.data = json.data[0]
     return json.data;
 }

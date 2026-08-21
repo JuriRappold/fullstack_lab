@@ -70,10 +70,11 @@ export const readUpdateById = asyncHandler( async(
 })
 
 export const readUpdatesOfUser = asyncHandler( async(
-    req: Request<never, responseBody<updateDTO[]>, never>,
+    req: Request<{userId: string}, responseBody<updateDTO[]>, never>,
     res: Response<responseBody<updateDTO[]>>
 ) => {
-    const result = await getUpdateOfUser(req.user.id);
+    const userId = req.params.userId;
+    const result = await getUpdateOfUser(userId ?? req.user.id);
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,

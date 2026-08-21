@@ -122,7 +122,7 @@ export type ProjectDocument = Omit<projectDocument, 'owner_id' | 'contributors'>
 export type UpdateData = InferSchemaType<typeof updateSchema>;
 export type updateDocument = HydratedDocument< UpdateData >;
 export type UpdateDocument = Omit<updateDocument, 'project_id' | 'contributor'> & {
-    project_id: Pick<projectDocument, 'id' | 'title'>,
+    project_id: Pick<projectDocument, 'id' | 'title' | 'status'>,
     contributor_id: Pick<UserDocument, 'id' | 'username'>
 }
 

@@ -21,10 +21,13 @@ export class MyError extends Error{
     constructor(error: unknown){
         let normal = error;
         if(!MyError.isMyError(normal) ){
+            console.log("NOT MY ERROR")
             if(isResponseError(normal)){
+                console.log("RESPONSE ERROR")
                 normal = MyError.convertResToMy(normal);
             }
             else if(normal instanceof Error){
+                console.log("NORMAL ERROR")
                 normal = MyError.convertErrToMy(normal);
             }
             else {
@@ -41,6 +44,7 @@ export class MyError extends Error{
             this.name = normal.name ?? "Error";
             this.text = normal.text ?? "Try Again";
             this.reRoute = "/" + (normal.reRoute ?? "") ;
+            // console.log(this);
         }
         else throw new MyError({message: "Failed To Create Original Error", cause: "Original Error was not a valid Parameter", reRoute: "/", name: "ErrorCreationError", text:"Try Again"} satisfies normalError)
     }
@@ -62,15 +66,17 @@ export class MyError extends Error{
         return {
             message: err.error,
             cause: err.statusCode.toString(),
-            name: "ApiError"
+            name: "ApiError",
+            reRoute: '/home'
         }
     }
     static convertErrToMy(err: Error){
         return {
             message: err.message,
             cause: String(err.cause ?? "Unknown"),
-            reRoute: '/',
-            text: "Try Again"
+            reRoute: '/home',
+            text: "Try Again",
+            name: err.name
         }
     }
 }

@@ -39,6 +39,8 @@ export {
     isMinimalUserArray,
     isOptionalMinimalUser,
     isOptionalMinimalUserArray,
+
+    type fullUser,
 } from './user.DTO.js';
 
 export {

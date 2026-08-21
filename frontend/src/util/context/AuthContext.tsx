@@ -13,7 +13,7 @@ import {
     type AuthContextValue,
     type authHeader,
     type emptyObject,
-    type fullUser,
+    type full_user,
     type halfUser
 } from '../types/'
 import {MyError} from "../errors";
@@ -36,7 +36,7 @@ export default function AuthProvider( {children}: {children: ReactNode} ){
     // });
     const [loading, setLoading] = useState<boolean>(true);
 
-    function save(fUser: fullUser){
+    function save(fUser: full_user){
         const user: halfUser = {username: fUser.username, id: fUser.id}
         setUser(user);
         setToken(fUser.token);

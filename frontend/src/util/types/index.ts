@@ -1,6 +1,6 @@
 export type {
     halfUser,
-    fullUser,
+    full_user,
 } from './Frontend.User.Type.ts';
 
 export type {

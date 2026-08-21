@@ -78,7 +78,7 @@ export const getProjectById = asyncHandler( async (
     //query
     const project = await getProjectBy(projectId, req.user.id)
     if(!project) throw ApiError.notFound(`Project with id ${projectId} was not found`);
-    if(project === -1) throw ApiError.forbidden(`Is not your project!`);
+    // if(project === -1) throw ApiError.forbidden(`Is not your project!`);
     if(Array.isArray(project)) throw ApiError.internal(`Project is an Array...`);
     //send response
     // console.log(project);
@@ -94,7 +94,7 @@ export const getProjectsOfUser = asyncHandler( async (
     req: Request< { userId: string }, responseBody<projectDTO[]>, never >,
     res: Response<responseBody<projectDTO[]>>
 ) => {
-    const userId = req.params.userId === "1" ? req.user.id : req.params.userId;
+    const userId = req.params.userId;
     if(!isUUID.test(userId)) throw ApiError.badRequest(`Invalid UUID: ${userId}`);
 
     const projects: projectDTO[] = await getProjectFrom(userId);

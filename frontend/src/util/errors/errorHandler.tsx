@@ -5,21 +5,23 @@ import {MyError} from "./MyError.ts";
 
 
 export function ErrorHandler( { children }: { children: React.ReactNode } ) {
-    const [error, setError] = useState<Error | null>(null);
+    const [err, setErr] = useState<Error | null>(null);
     function clearError() {
-        setError(null);
+        setErr(null);
     }
     useEffect(() => {
         const handleError = (event: ErrorEvent) => {
-            // event.preventDefault();
+            event.preventDefault();
             console.log("GLOBAL ERROR HANDLER");
-            setError(event.error instanceof Error ? event.error : new Error(event.message));
+            setErr(event.error instanceof Error ? event.error : new Error(event.message));
+            // setError(event.error);
             // return true;
         };
         const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
             // event.preventDefault();
             console.log("GLOBAL REJECTION HANDLER");
-            setError(event.reason instanceof Error ? event.reason : new Error(String(event.reason)));
+            setErr(event.reason instanceof Error ? event.reason : new Error(String(event.reason)));
+            // setError(event.reason);
             // return true;
         };
         window.addEventListener('error', handleError);
@@ -35,10 +37,9 @@ export function ErrorHandler( { children }: { children: React.ReactNode } ) {
         };
     }, []);
     useEffect(() => {
-        console.log('ErrorHandler error:', error);
-    }, [error]);
+        console.log('ErrorHandler error:', err);
+    }, [err]);
 
-
-    if(error) return <ErrorPage error={new MyError(error)} onReset={clearError} />;
+    if(err) return <ErrorPage error={err} onReset={clearError} />;
     else return <>{children}</>;
 }

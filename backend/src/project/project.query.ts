@@ -45,13 +45,7 @@ async function projectsFrom(userId: string): Promise< ProjectDocument[] > {
 
 async function projectsByIds(projectIds: string[], userId: string): Promise<ProjectDocument[]> {
     //@ts-ignore
-    return ProjectModel.find({
-            id: projectIds,
-            $or: [
-                {owner_id: userId},
-                {contributors: userId}
-            ]
-    }).populate('owner_id', 'id username').populate('contributors', 'id username');
+    return ProjectModel.find({id: projectIds}).populate('owner_id', 'id username').populate('contributors', 'id username');
 }
 
 /*

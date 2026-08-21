@@ -1,4 +1,6 @@
 import {isOptionalString} from "../general.type.guards.js";
+import {projectDTO} from "./project.DTO.js";
+import {updateDTO} from "./update.DTO.js";
 
 /*
 **USER**
@@ -11,6 +13,11 @@ export type userDTO = {
 }
 export type minimalUser = Required<Pick<userDTO, 'username' | 'id'>>;
 export type partialUserDTO = Partial<userDTO>
+
+export type fullUser = minimalUser & {
+    projects: projectDTO[],
+    updates: updateDTO[]
+}
 
 export function isUserDTO(value: unknown): value is userDTO {
     if (typeof value !== "object" || value === null) {

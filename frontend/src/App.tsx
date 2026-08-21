@@ -10,42 +10,40 @@ import {
   Placeholder
 } from './pages';
 
-import {
-  ProtectedRoute
-} from './util/services';
 
 import {
   ErrorHandler,
   ErrorBoundary,
   ErrorPage
 } from "./util/errors";
-import {FetchTest} from "./pages/fetchTest.tsx";
-import {Card} from "./components/ui/Card.tsx";
-import {User} from "./pages/userTemp.tsx";
+import {
+    User,
+    PageWrapper,
+    DisplayProject,
+    DisplayUpdate,
+    LogIn,
+    Register,
+    Home
+} from "./pages";
 
 function AppRoutes(){
   return(
       <>
-        <main>
           <Routes>
             {/*unprotected Routes: login & register*/}
             <Route path="/" element={
-              <Placeholder title={"Landing Page"} />
+                <LogIn />
             } />
-            <Route path="/login" element={
-              <Placeholder title={"Login"}/>
-            }/>
             <Route path="/register" element={
-              <Placeholder title={"Register"}/>
+                <Register />
             }/>
 
             {/*protected Routes*/}
             <Route path="/home" element={
-              <Placeholder title={"HOME"}/>
+                <PageWrapper children={<Home/>}/>
             }/>
             <Route path="/projects/:projectId" element={
-              // <Placeholder title={"Project Display"}/>
-                <FetchTest />
+                <PageWrapper children={<DisplayProject />} />
             }/>
             <Route path="/projects/create" element={
               <Placeholder title={"Project Create"}/>
@@ -57,16 +55,16 @@ function AppRoutes(){
               <Placeholder title={"Create an Update"}/>
             }/>
             <Route path="/update/:updateId" element={
-              <Placeholder title={"Update Display"}/>
+              <PageWrapper children={<DisplayUpdate/>}/>
             }/>
             <Route path={"/user/:userId"} element={
-              <User />
+              <PageWrapper children={ <User />} />
             }/>
           </Routes>
-        </main>
       </>
   )
 }
+
 
 
 function App() {

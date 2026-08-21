@@ -12,10 +12,16 @@ import {
 import {
     ApiError,
     userDTO,
-    minimalUser
+    minimalUser,
+    fullUser
 } from "@fullstack-lab/utils";
-import {UserDocument} from "../database/index.js";
-// import {minimalUser} from "@fullstack-lab/utils/dist/types/index.js";
+import {ProjectDocument, UpdateDocument, UserDocument} from "../database/index.js";
+
+import { query as projectQuery } from '../project/project.query.js';
+import { format as projectFormat } from '../project/project.utils.js';
+
+import { query as updateQuery } from '../update/update.query.js';
+import { format as updateFormat } from '../update/update.utils.js';
 
 export const logIn = async (username: string, password: string): Promise<userDTO> =>  {
     const user: UserDocument | null = await query.read.userByName(username);
@@ -47,9 +53,7 @@ export const getMeModel = async (username: string): Promise<userDTO | null> =>  
 
 export const getUsersById = async (userIds: string[]): Promise<minimalUser[]> => {
     const userDocs: UserDocument[] = await query.read.usersByIds(userIds)
-
     const users: minimalUser[] = [];
-
     userDocs.forEach( el => {
         if (userIds.includes(el.id)){
             users.push({id: el.id, username: el.username});
@@ -58,5 +62,25 @@ export const getUsersById = async (userIds: string[]): Promise<minimalUser[]> =>
 
     return users;
 
+
+}
+
+export const getFullUserById = async (userId: string): Promise<fullUser | null> => {
+    const userDoc: UserDocument | null = await query.read.userById(userId)
+    if(!userDoc) return null; //404 user not found
+    const userDto = format.DocumentToDTO(userDoc);
+
+    const project: ProjectDocument[] = await projectQuery.read.projectsFrom(userId);
+    const projectDto = project.map(projectFormat.DocumentToDTO);
+
+    const update: UpdateDocument[] = await updateQuery.read.getUpdateOfUser(userId);
+    const updateDto = update.map(updateFormat.DocumentToDTO);
+
+    return {
+        username: userDto.username,
+        id: userDto.id,
+        projects: projectDto,
+        updates: updateDto
+    } satisfies fullUser
 
 }

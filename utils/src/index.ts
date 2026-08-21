@@ -51,6 +51,8 @@ export {
     isMinimalUpdateArray,
     isOptionalMinimalUpdate,
     isOptionalMinimalUpdateArray,
+
+    type fullUser,
 } from './types/index.js';
 
 export { ApiError } from './ApiError.js';

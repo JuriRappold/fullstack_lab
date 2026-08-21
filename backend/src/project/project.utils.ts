@@ -33,8 +33,14 @@ const DocToMinimal = (min: ProjectDocument): minimalProject => {
     } satisfies minimalProject
 }
 
+const isContributor = (userId: string, contributors: {id: string, username: string}[]) => {
+    const tmp = contributors.filter( c => c.id === userId)
+    return tmp.length > 0;
+}
+
 export const format = {
     DocumentToDTO,
     DTOToData,
-    DocToMinimal
+    DocToMinimal,
+    isContributor
 }

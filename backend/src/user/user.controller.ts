@@ -1,12 +1,22 @@
 import {asyncHandler} from "../middleware/asyncHandler.js";
-import {ApiError, httpCreated, httpOK, requestBody, responseBody, userDTO} from "@fullstack-lab/utils";
+import {
+    ApiError, fullUser,
+    httpCreated,
+    httpOK,
+    projectDTO,
+    requestBody,
+    responseBody,
+    updateDTO,
+    userDTO
+} from "@fullstack-lab/utils";
 import {Request, Response} from 'express';
 import {
     register,
     logIn,
-    getMeModel
+    getMeModel, getFullUserById
 } from "./user.model.js";
 import {format} from "./user.utils.js";
+import * as http from "node:http";
 
 export const registerNewUser = asyncHandler(async (
     req: Request<never, responseBody<userDTO>, requestBody<userDTO> >,
@@ -43,7 +53,7 @@ export const getMe = asyncHandler( async (
     req: Request<never, responseBody<userDTO>, never>,
     res: Response<responseBody<userDTO>>
 ) => {
-    console.log(req.user);
+    // console.log(req.user);
     const user = await getMeModel(req.user.username);
     if(!user) throw ApiError.internal(`Something went wrong while fetching the user`);
     res.status(httpOK.status).json({
@@ -51,4 +61,21 @@ export const getMe = asyncHandler( async (
         message: httpOK.message,
         data: user
     } satisfies responseBody<userDTO>);
+})
+
+
+export const getFullUser = asyncHandler( async (
+    req: Request< {userId: string}, responseBody<fullUser>, never>,
+    res: Response< responseBody<fullUser> >
+) => {
+    const userId = req.params.userId;
+
+    const userFull = await getFullUserById(userId);
+    if(!userFull) throw ApiError.notFound(`User not Found`);
+    res.status(httpOK.status).json({
+        status: httpOK.status,
+        message: httpOK.message,
+        data: userFull
+    } satisfies responseBody<fullUser>)
+
 })

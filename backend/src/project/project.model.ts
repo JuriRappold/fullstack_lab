@@ -38,14 +38,12 @@ export const createProject = async (newProject: projectDTO): Promise<projectDTO>
  */
 // const unAuth = -1 as const;
 
-export const getProjectBy = async (projectId: string, userId: string): Promise<projectDTO | null | -1> => {
-    const project = await query.read.projectById(projectId, userId);
+export const getProjectBy = async (projectId: string, userId: string): Promise<projectDTO | null> => {
+    let project: ProjectDocument | projectDTO | null = await query.read.projectById(projectId, userId);
     if(!project) return null;
-    if(project.owner_id.id !== userId) return -1;
-    if(project.contributors.filter(el => el.id === userId).length === 0){
-        return -1;
-    }
-    return format.DocumentToDTO(project);
+    project = format.DocumentToDTO(project);
+    // if(!format.isContributor(userId, project.contributors) && project.owner.id.toString() !== userId )  return -1;
+    return project;
 }
 export const getProjectFrom = async (userId: string): Promise<projectDTO[]> => {
     const projects: ProjectDocument[] = await query.read.projectsFrom(userId);
