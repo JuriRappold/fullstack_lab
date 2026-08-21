@@ -3,6 +3,7 @@ import {useState} from "react";
 export function DropDown({projects}: {projects?: minimalProject[]}){
     const [status, setStatus] = useState<STATUS>("IDEA");
     const [project, setProject] = useState<string>();
+
     function handleChange(event) {
         setStatus(event.target.value)
     }
@@ -11,7 +12,6 @@ export function DropDown({projects}: {projects?: minimalProject[]}){
     }
 
     if(projects){
-        console.log(projects);
         return (
             <>
                 <fieldset>

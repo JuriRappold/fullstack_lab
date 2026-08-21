@@ -7,7 +7,7 @@ import {
     type fetchProps
 } from '../types';
 import {MyError, type normalError} from "../errors";
-import type {minimalProject, projectDTO, responseError} from "@fullstack-lab/utils";
+import type {minimalProject, projectDTO} from "@fullstack-lab/utils";
 import {ApiResponseError} from "../errors/ApiResponseError.ts";
 type callProjectProps = fetchProps & {
     projectId?: string,
@@ -77,7 +77,7 @@ export async function getProjectsByUser(userId: string, toke: string): Promise<p
     return json.data;
 }
 
-export async function createProject(toke: string, requestData: object){
+export async function createProject(toke: string, requestData: object): Promise<projectDTO> {
     const obj = getFetchObject({method: "POST", token: toke, requestData});
     const response = await fetch(obj.url, obj.requestObj);
     const json = await response.json();
@@ -86,7 +86,7 @@ export async function createProject(toke: string, requestData: object){
     return json.data;
 }
 
-export async function updateProject(toke: string, requestData: object) {
+export async function updateProject(toke: string, requestData: object): Promise<projectDTO>  {
     const obj = getFetchObject({method: "PATCH", token: toke, requestData});
     const response = await fetch(obj.url, obj.requestObj);
     const json = await response.json();
@@ -95,7 +95,7 @@ export async function updateProject(toke: string, requestData: object) {
     return json.data;
 }
 
-export async function deleteProject(toke: string, projectId: string): boolean {
+export async function deleteProject(toke: string, projectId: string): Promise<boolean> {
     const obj = getFetchObject({method: "DELETE", token: toke, projectId});
     const response = await fetch(obj.url, obj.requestObj);
     const json = await response.json();
@@ -104,7 +104,7 @@ export async function deleteProject(toke: string, projectId: string): boolean {
     return true;
 }
 
-export async function getAllProjects(token): Promise<minimalProject[]> {
+export async function getAllProjects(token: string): Promise<minimalProject[]> {
     const obj = getFetchObject({method: "GET",token})
     const response = await fetch(obj.url, obj.requestObj);
 

@@ -23,6 +23,7 @@ const DTOToData = (proDTO: projectDTO): ProjectData => {
         status: proDTO.status,
         owner_id: new ObjectId(proDTO.owner.id),
         contributors: proDTO.contributors.map( el => new ObjectId(el.id)),
+        description: proDTO.description
     } satisfies ProjectData
 }
 

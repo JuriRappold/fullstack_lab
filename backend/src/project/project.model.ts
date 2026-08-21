@@ -19,7 +19,8 @@ import {ProjectDocument} from "../database/index.js";
 	- returns 409 if project title not unique
 */
 export const createProject = async (newProject: projectDTO): Promise<projectDTO> => {
-    const result = await query.create.newProject(format.DTOToData(newProject));
+    const formatted = format.DTOToData(newProject)
+    const result = await query.create.newProject(formatted);
     return format.DocumentToDTO(result);
 
 }

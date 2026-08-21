@@ -6,7 +6,7 @@ import {
 import {useEffect, useState} from "react";
 import {getAllProjects} from "../util/apiCalls/project.Call.ts";
 import {useAuth} from "../util/context/AuthContext.tsx";
-import type {minimalProject, projectDTO, updateDTO} from "@fullstack-lab/utils";
+import type {minimalProject, updateDTO} from "@fullstack-lab/utils";
 import {createUpdate} from "../util/apiCalls/update.Calls.ts";
 import {useNavigate} from "react-router-dom";
 
@@ -64,7 +64,7 @@ export function CreateUpdate(){
                 <BigTextbox label={"Description"}/>
             {/*  which project? --> dropdown  */}
                 <DropDown projects={projects}/>
-                <button type={"submit"} className={"button"} id={"updateCreateBtn"} >LogIn</button>
+                <button type={"submit"} className={"button"} id={"updateCreateBtn"} >Create</button>
             </form>
         </>
     )
