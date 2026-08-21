@@ -47,7 +47,10 @@ async function projectsByIds(projectIds: string[], userId: string): Promise<Proj
     //@ts-ignore
     return ProjectModel.find({id: projectIds}).populate('owner_id', 'id username').populate('contributors', 'id username');
 }
-
+async function allProjects(): Promise<ProjectDocument[]>{
+    //@ts-ignore
+    return ProjectModel.find({}).select('id title status')
+}
 /*
 **UPDATE**
 - PATCH `/api/projects/:id`
@@ -95,7 +98,8 @@ export const query = {
     read: {
         projectById,
         projectsFrom,
-        projectsByIds
+        projectsByIds,
+        allProjects,
     },
     update: {
         updateProject

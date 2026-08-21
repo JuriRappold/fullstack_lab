@@ -6,7 +6,7 @@ import {ObjectId} from "mongodb";
 const DTOtoData = (dto: updateDTO): UpdateData => {
     return {
         title: dto.title,
-        project_id: new ObjectId(dto.id),
+        project_id: new ObjectId(dto.project.id),
         contributor_id: new ObjectId(dto.contributor.id),
         description: dto.description
     } satisfies UpdateData;

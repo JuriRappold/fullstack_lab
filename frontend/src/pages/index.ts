@@ -6,3 +6,4 @@ export {PageWrapper} from './PageWrapper.tsx';
 export {Home} from './Home.tsx';
 export {LogIn} from './LogIn.tsx';
 export {Register} from './Register.tsx';
+export {CreateUpdate} from'./CreateUpdate.tsx'

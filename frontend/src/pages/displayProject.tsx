@@ -1,9 +1,11 @@
+import './project.css';
 import {useEffect, useState} from "react";
-import {Button, Linki, Lists} from '../components/ui';
+import {Button, Linki, Lists} from '../components';
 import {
     getProjectById,
     getProjectsByUser
 } from '../util/apiCalls/project.Call.ts'
+import {type STATUS} from "@fullstack-lab/utils";
 
 import type {minimalUpdate, projectDTO, responseError, updateDTO} from "@fullstack-lab/utils";
 import {Link, useParams} from "react-router-dom";
@@ -18,6 +20,22 @@ export function DisplayProject(){
     const [project, setProject] = useState<projectDTO>();
     const [updates, setUpdates] = useState<updateDTO[]>();
     const [error, setError] = useState<responseError | Error>();
+
+    function whichColor(status: STATUS){
+        switch(status) {
+            case "WIP":
+                return "yellow";
+            case "ARCHIVED":
+                return "gray";
+            case "DESIGN":
+                return "darkgoldenrod";
+            case "IDEA":
+                return "red";
+            case "FINISHED":
+                return "green";
+        }
+    }
+
     useEffect(() => {
         async function loadProjectById() {
             if(!token) return;
@@ -49,9 +67,16 @@ export function DisplayProject(){
             return (
                 <>
                     <div id={project.id}>
-                        <h2>Project: {project.title}</h2>
-                        <p>{project.description}</p>
-                        <p id={project.owner.id}>Owner: {<Linki text={project.owner.username} to={`/user/${project.owner.id}`}></Linki>}</p><br/>
+                            <h2>Project: {project.title}</h2>
+                            <p>{project.description}</p>
+                        <div id={"ownerAndStatus"}>
+                            <p id={project.owner.id}>Owner: {<Linki text={project.owner.username} to={`/user/${project.owner.id}`}></Linki>}</p>
+                            <p>
+                                <span>Status: </span>
+                                <span style={{color: whichColor(project.status)}}>{project.status}</span>
+                            </p>
+                        </div>
+
                         <h4>Contributors:</h4>
                         <Lists data={project.contributors}/>
                         <h4>Updates: </h4>

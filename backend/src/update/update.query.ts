@@ -1,13 +1,5 @@
-import {
-    ProjectModel,
-    UpdateData,
-    UpdateDocument,
-    UpdateModel,
-} from "../database/index.js";
-
-import {
-    ApiError
-} from "@fullstack-lab/utils";
+import {ProjectModel, UpdateData, UpdateDocument, UpdateModel,} from "../database/index.js";
+import {ObjectId} from "mongodb";
 
 /**
  * Checks ownership and contribution list for the user. Returns true if the userId is found, else it returns false.
@@ -26,19 +18,17 @@ async function checkIfAllowed(projectId: string, userId: string): Promise<boolea
     return project !== null;
 }
 
-async function addContributor(projectId: string, userId: string) {
+async function addContributor(projectId: ObjectId, userId: ObjectId) {
     return ProjectModel.findOneAndUpdate(
         {
-            id: projectId,
+            _id: projectId,
         },
         {
             $addToSet: {
                 contributors: userId
             }
         },
-        {
-            new: true
-        }
+        {returnDocument: 'after'},
     )
 }
 
@@ -53,13 +43,15 @@ async function addContributor(projectId: string, userId: string) {
  * @param newData
  * @param userId
  */
-async function newUpdate(newData: UpdateData, userId: string): Promise<UpdateDocument | null> { //
+async function newUpdate(newData: UpdateData, userId: string): Promise<UpdateDocument | null | -1> {
+    console.log(newData);
     const projectId = newData.project_id.toString();
     if( ! (await checkIfAllowed( projectId, userId)) ){
-        const result = await addContributor(projectId, userId);
-        if(!result) return null;
+        const result = await addContributor(newData.project_id, new ObjectId(userId));
+        if(!result) return -1;
     }
-    return (await (await UpdateModel.create(newData)).populate('project_id', 'id title  status')).populate('contributor', 'id username');
+    //@ts-ignore
+    return await UpdateModel.create(newData)
 }
 
 /*
@@ -79,6 +71,7 @@ async function getUpdateById( updateId: string, userId: string): Promise<UpdateD
     //     return tmp;
     // }
     // else throw ApiError.forbidden(`Contribute to the Project First`);
+    //@ts-ignore
     return tmp;
 }
 async function getUpdateOfUser( userId: string ): Promise<UpdateDocument[]> {

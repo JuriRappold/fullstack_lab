@@ -10,8 +10,10 @@ import {UpdateDocument} from "../database/index.js";
  * @param newData updateDTO --> data to be inserted into DB
  * @param userId string -->
  */
-export const createUpdate = async (newData: updateDTO, userId: string): Promise<updateDTO | null> => {
-    const update: UpdateDocument | null = await query.create.newUpdate( format.DTOtoData(newData), userId );
+export const createUpdate = async (newData: updateDTO, userId: string): Promise<updateDTO | null | -1> => {
+    const updatedData = format.DTOtoData(newData);
+    const update: UpdateDocument | null | -1 = await query.create.newUpdate( updatedData, userId );
+    if(update === -1) return -1;
     return update ? format.DocumentToDTO(update) : null;
 }
 

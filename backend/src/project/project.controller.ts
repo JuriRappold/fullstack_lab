@@ -12,14 +12,21 @@ import {
     httpOK,
     isPartialProjectDTO,
     isProjectDTO,
-    isUUID,
+    isUUID, minimalProject,
     partialProjectDTO,
     projectDTO,
     requestBody,
     responseBody,
 } from "@fullstack-lab/utils";
 import {Request, Response} from 'express';
-import {createProject, delProjectId, getProjectBy, getProjectFrom, updateProById} from './project.model.js'
+import {
+    createProject,
+    delProjectId,
+    getAllMinimalProjects,
+    getProjectBy,
+    getProjectFrom,
+    updateProById
+} from './project.model.js'
 
 /*
 **CREATE**
@@ -103,6 +110,19 @@ export const getProjectsOfUser = asyncHandler( async (
         message: httpOK.message,
         data: projects
     } satisfies responseBody<projectDTO[]>)
+})
+
+export const getAllProjects = asyncHandler( async (
+    req: Request<never, responseBody<minimalProject[]>, never>,
+    res: Response< responseBody<minimalProject[]> >
+) => {
+    const projects = await getAllMinimalProjects();
+    if(!projects) throw ApiError.internal("Something went wrong");
+    res.status(httpOK.status).json({
+        status: httpOK.status,
+        message: httpOK.message,
+        data: projects
+    } satisfies responseBody<minimalProject[]>)
 })
 
 

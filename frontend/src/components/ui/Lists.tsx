@@ -1,4 +1,4 @@
-import { type minEntity, miniToEntity} from "../../util/formatting.ts";
+import { miniToEntity} from "../../util/formatting.ts";
 import type {projectDTO, updateDTO, userDTO} from "@fullstack-lab/utils";
 import {Card} from "./Card.tsx";
 

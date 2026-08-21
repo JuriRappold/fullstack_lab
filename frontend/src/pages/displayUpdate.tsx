@@ -21,7 +21,7 @@ export function DisplayUpdate(){
         async function loadProjectById() {
             if(!token) return;
             try{
-                console.log("Params update ID: " + updateId);
+                // console.log("Params update ID: " + updateId);
                 const fetchedUpdate = await getUpdateById(updateId, token);
                 setUpdate(fetchedUpdate);
 

@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom';
 
 import {
-  Placeholder
+    CreateUpdate,
+    Placeholder
 } from './pages';
 
 
@@ -52,7 +53,7 @@ function AppRoutes(){
               <Placeholder title={"Editing Project Info"}/>
             }/>
             <Route path="/update/create" element={
-              <Placeholder title={"Create an Update"}/>
+              <PageWrapper children={<CreateUpdate/>}/>
             }/>
             <Route path="/update/:updateId" element={
               <PageWrapper children={<DisplayUpdate/>}/>

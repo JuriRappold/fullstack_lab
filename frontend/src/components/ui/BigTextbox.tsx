@@ -10,7 +10,7 @@ export function BigTextbox({label}: {label?: string}){
         <>
             <fieldset className={"description"}>
                 <legend>{label ?? "Description"}:</legend>
-                <textarea maxLength={500} id={"descriptionInput"} rows={10} cols={50} onChange={handleChange} ></textarea>
+                <textarea maxLength={500} id={"descriptionInput"} rows={10} cols={50} onChange={handleChange} required name={label} ></textarea>
                 { charCount === 500 && (
                     <div className={"fullWarning"} id={"full"}>You have reached the maximum Length</div>
                 )}

@@ -29,7 +29,8 @@ const DTOToData = (proDTO: projectDTO): ProjectData => {
 const DocToMinimal = (min: ProjectDocument): minimalProject => {
     return {
         id: min.id,
-        title: min.title
+        title: min.title,
+        status: min.status,
     } satisfies minimalProject
 }
 

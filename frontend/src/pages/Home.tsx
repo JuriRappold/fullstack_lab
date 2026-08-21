@@ -59,12 +59,10 @@ export function Home(){
                 <div className={"home"}>
                     <aside>
                         <h4>Contributions</h4>
-                        {/*<p>{user?.username}</p>*/}
                         <Lists data={updates} />
                     </aside>
                     <main>
                         <h2>Projects</h2>
-                        {/*<Card data={{id: PROJECT.id, text: PROJECT.title, status: "DESIGN", type: "projects"}} />*/}
                         <Lists data={projects} />
                     </main>
                 </div>

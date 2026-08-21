@@ -63,7 +63,7 @@ function getFetchObject({ method, token, updateId, userId, requestData, projectI
     return fetchObject;
 }
 
-export async function createUpdate(projectId: string, requestData: object, token: string){
+export async function createUpdate(projectId: string, requestData: object, token: string): Promise<updateDTO>{
     const obj = getFetchObject({method: "POST", token, projectId, requestData});
     const response = await fetch(obj.url, obj.requestObj);
     const json = await response.json();

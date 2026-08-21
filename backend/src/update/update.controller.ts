@@ -8,7 +8,6 @@ import {
     responseBody,
     requestBody,
     updateDTO,
-    isUpdateDTO,
     ApiError,
     httpCreated,
     httpOK
@@ -26,16 +25,17 @@ export const newUpdate = asyncHandler( async (
     res: Response< responseBody<updateDTO> >
 ) => {
     const { data } = req.body!;
-    if( isUpdateDTO(data) ){
-        const result = await createUpdate(data, req.user.id);
-        if (!result) throw ApiError.internal(`Failed to add update`);
-        res.status(httpCreated.status).json({
-            status: httpCreated.status,
-            message: httpCreated.message,
-            data: result
-        } satisfies responseBody<updateDTO>)
-    }
-    else throw ApiError.badRequest(`Bad Data`);
+    if(!data) throw ApiError.badRequest(`Bad Data: ${data}`);
+
+    const result = await createUpdate(data, req.user.id);
+    if(result === -1) throw ApiError.internal("Failed to add Contributor");
+    if (!result) throw ApiError.internal(`Failed to add update`);
+
+    res.status(httpCreated.status).json({
+        status: httpCreated.status,
+        message: httpCreated.message,
+        data: result
+    } satisfies responseBody<updateDTO>)
     return;
 })
 
@@ -45,7 +45,7 @@ export const readUpdatesOfProject = asyncHandler( async(
 ) => {
     const projectId = req.params.projectId;
     const result = await getUpdatesOfProject(projectId, req.user.id);
-    if (!result) throw ApiError.forbidden(`Contribute to the Project First`);
+    if (!result) throw ApiError.notFound(`No Update found`); //internal?
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,

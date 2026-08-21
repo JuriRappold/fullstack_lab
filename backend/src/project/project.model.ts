@@ -61,7 +61,7 @@ export const updateProById = async (projectId: string, newData: partialProjectDT
     return result ? format.DocumentToDTO(result) : result;
 }
 
-export const getMinimalProjects = async (projectIds: string[], userId: string): Promise<minimalProject[]> => {
-    const minProjects: ProjectDocument[] = await query.read.projectsByIds(projectIds, userId);
+export const getAllMinimalProjects = async (): Promise<minimalProject[]> => {
+    const minProjects: ProjectDocument[] = await query.read.allProjects();
     return minProjects.map(format.DocToMinimal);
 }
