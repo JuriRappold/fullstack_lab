@@ -1,6 +1,6 @@
 import './textbox.css';
 import {useState} from "react";
-export function SmallTextbox({label, isRequired}: {label: string, isRequired?: boolean}){
+export function SmallTextbox({label, isRequired, def}: {label: string, isRequired?: boolean, def?: string}){
     const [charCount, setCharCount] = useState(0);
     function handleChange(event: React.ChangeEvent<HTMLInputElement>){
         setCharCount(event.target.value.length);
@@ -11,10 +11,10 @@ export function SmallTextbox({label, isRequired}: {label: string, isRequired?: b
                 <legend >{label ?? "Title"}: </legend>
                 <div>
                     { isRequired &&
-                        <input maxLength={50} type={"text"} id={"titleInput"} onChange={handleChange} required name={label}/>
+                        <input maxLength={50} type={"text"} id={"titleInput"} onChange={handleChange} required name={label} placeholder={def ??"..." }/>
                     }
                     { !isRequired && (
-                        <input maxLength={50} type={"text"} id={"titleInput"} onChange={handleChange} name={label}/>
+                        <input maxLength={50} type={"text"} id={"titleInput"} onChange={handleChange} name={label} placeholder={def ??"..." }/>
                     )}
                     <span>{charCount}/50</span>
                 </div>

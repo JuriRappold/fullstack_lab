@@ -152,7 +152,7 @@ export const updateProjectById = asyncHandler( async(
     const projectId = req.params.id;
     if(!isUUID.test(projectId)) throw ApiError.badRequest(`Invalid UUID: ${projectId}`);
     const {data} = req.body;
-    if(!data) throw ApiError.badRequest(`Include data`)
+    if(!data) throw ApiError.badRequest(`Include data`);
     if(isPartialProjectDTO(data)) {
         const result = await updateProById(projectId, data, req.user.id);
         if(!result) throw ApiError.notFound();

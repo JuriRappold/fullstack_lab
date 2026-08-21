@@ -1,0 +1,28 @@
+.editingProject {
+    display: grid;
+    grid-template:
+    'title title auto'
+    'current new auto ';
+
+    h2 {
+        grid-area: title;
+        justify-self: center;
+    }
+
+    #currentProject {
+        grid-area: current;
+    }
+
+    #newProject {
+        grid-area: new;
+
+        form {
+            background-color: var(--bg2);
+
+            button {
+                align-self: center;
+                justify-self: center;
+            }
+        }
+    }
+}

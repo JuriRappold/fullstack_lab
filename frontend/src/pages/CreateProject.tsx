@@ -11,6 +11,7 @@ export function CreateProject(){
     const navigate = useNavigate();
     // const [project, setProject] = useState<projectDTO>();
 
+
     async function handleSubmit(event) {
         event.preventDefault();
         const formData = Object.fromEntries(new FormData(event.currentTarget));

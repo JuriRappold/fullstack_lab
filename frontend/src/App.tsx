@@ -6,26 +6,24 @@ import {
   BrowserRouter
 } from 'react-router-dom';
 
-import {
-    CreateProject,
-    CreateUpdate,
-    Placeholder
-} from './pages';
-
 
 import {
   ErrorHandler,
   ErrorBoundary,
   ErrorPage
 } from "./util/errors";
+
 import {
+    CreateProject,
+    CreateUpdate,
     User,
     PageWrapper,
     DisplayProject,
     DisplayUpdate,
     LogIn,
     Register,
-    Home
+    Home,
+    EditProject
 } from "./pages";
 
 function AppRoutes(){
@@ -50,8 +48,8 @@ function AppRoutes(){
             <Route path="/projects/create" element={
               <PageWrapper children={<CreateProject/>} />
             }/>
-            <Route path="/projects/update/:projectId" element={
-              <Placeholder title={"Editing Project Info"}/>
+            <Route path="/projects/edit/:projectId" element={
+              <PageWrapper children={<EditProject/>} />
             }/>
             <Route path="/update/create" element={
               <PageWrapper children={<CreateUpdate/>}/>

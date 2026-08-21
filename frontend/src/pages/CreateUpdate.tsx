@@ -21,6 +21,9 @@ export function CreateUpdate(){
     } satisfies updateDTO)
     const navigate = useNavigate();
 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
+
     async function handleSubmit(event){
         event.preventDefault();
         const formData = Object.fromEntries(new FormData(event.currentTarget));
@@ -52,20 +55,39 @@ export function CreateUpdate(){
 
     useEffect(() => {
         async function fetchProjects(){
-            const response = await getAllProjects(token);
-            setProjects(response);
+            try{
+                const response = await getAllProjects(token);
+                setProjects(response);
+            } catch(e){
+                setError(e);
+            } finally{
+                setLoading(false);
+            }
         }
         fetchProjects();
     }, [token]);
-    return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <SmallTextbox label={"Title"} />
-                <BigTextbox label={"Description"}/>
-            {/*  which project? --> dropdown  */}
-                <DropDown projects={projects}/>
-                <button type={"submit"} className={"button"} id={"updateCreateBtn"} >Create</button>
-            </form>
-        </>
-    )
+
+    if(loading){
+        return (
+            <>
+                <div>Loading...</div>
+            </>
+        )
+    }
+
+    else if(error) throw error;
+
+    else{
+        return (
+            <>
+                <form onSubmit={handleSubmit}>
+                    <SmallTextbox label={"Title"} />
+                    <BigTextbox label={"Description"}/>
+                    {/*  which project? --> dropdown  */}
+                    <DropDown projects={projects}/>
+                    <button type={"submit"} className={"button"} id={"updateCreateBtn"} >Create</button>
+                </form>
+            </>
+        )
+    }
 }

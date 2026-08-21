@@ -11,20 +11,13 @@ import {
     type userDTO,
     isResponseError
 } from '@fullstack-lab/utils';
-import {MyError} from "../errors";
+import {ApiResponseError} from "../errors/ApiResponseError.ts";
 
 
 async function getData(res: Response): Promise<full_user>{
     const json: responseBody<full_user> | responseError = await res.json(); //
     if (isResponseError(json)) {
-        // if (!res.ok) throw new MyError({
-        //     message: `${json.statusCode}:${json.error}`,
-        //     cause: json.statusCode.toString(),
-        //     name:'ApiError'
-        // } satisfies normalError
-        // );
-        // else throw new MyError(json);
-        throw new MyError(json);
+        throw new ApiResponseError(json);
     }
     else return json.data;
 }

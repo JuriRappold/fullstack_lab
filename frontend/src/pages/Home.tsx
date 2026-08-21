@@ -58,7 +58,7 @@ export function Home(){
             <>
                 <div className={"home"}>
                     <aside>
-                        <h4>Contributions</h4>
+                        <h2>Contributions</h2>
                         <Lists data={updates} />
                     </aside>
                     <main>

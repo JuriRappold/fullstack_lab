@@ -58,7 +58,6 @@ export function DisplayProject(){
         return (
             <>
                 <div>Loading...</div>
-                <Button text={"Home"} />
             </>
         )
     }
@@ -67,7 +66,11 @@ export function DisplayProject(){
             return (
                 <>
                     <div id={project.id}>
-                            <h2>Project: {project.title}</h2>
+                            <div className={"hero"}>
+                                <h2>Project: {project.title}</h2>
+                                <Button onPush={`/projects/edit/${project.id}`} text={"Edit"}/>
+                                <div></div>
+                            </div>
                             <p>{project.description}</p>
                         <div id={"ownerAndStatus"}>
                             <p id={project.owner.id}>Owner: {<Linki text={project.owner.username} to={`/user/${project.owner.id}`}></Linki>}</p>

@@ -7,12 +7,12 @@ import {
     type fetchProps
 } from '../types';
 import {MyError, type normalError} from "../errors";
-import type {minimalProject, projectDTO} from "@fullstack-lab/utils";
+import type {minimalProject, partialProjectDTO, projectDTO} from "@fullstack-lab/utils";
 import {ApiResponseError} from "../errors/ApiResponseError.ts";
 type callProjectProps = fetchProps & {
     projectId?: string,
     userId?: string,
-    requestData?: object
+    requestData?: projectDTO | partialProjectDTO
 }
 function getFetchObject({ method, token, projectId, userId, requestData}: callProjectProps): fetchObj{
     let fetchObject: fetchObj;
@@ -86,8 +86,9 @@ export async function createProject(toke: string, requestData: object): Promise<
     return json.data;
 }
 
-export async function updateProject(toke: string, requestData: object): Promise<projectDTO>  {
-    const obj = getFetchObject({method: "PATCH", token: toke, requestData});
+export async function updateProject(toke: string, requestData: object, projectId: string): Promise<projectDTO>  {
+    const obj = getFetchObject({method: "PATCH", token: toke, requestData, projectId});
+    console.log(obj);
     const response = await fetch(obj.url, obj.requestObj);
     const json = await response.json();
     if(!response.ok) throw new ApiResponseError(json);

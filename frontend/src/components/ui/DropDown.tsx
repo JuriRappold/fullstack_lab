@@ -1,7 +1,10 @@
 import type {minimalProject, STATUS} from "@fullstack-lab/utils";
 import {useState} from "react";
-export function DropDown({projects}: {projects?: minimalProject[]}){
-    const [status, setStatus] = useState<STATUS>("IDEA");
+
+const stats = ["IDEA", "ARCHIVED", "DESIGN", "FINISHED", "WIP"] as const;
+
+export function DropDown({projects, def}: {projects?: minimalProject[], def?: STATUS}){
+    const [status, setStatus] = useState<STATUS>(!def ? "IDEA" : def);
     const [project, setProject] = useState<string>();
 
     function handleChange(event) {
@@ -23,18 +26,30 @@ export function DropDown({projects}: {projects?: minimalProject[]}){
             </>
         )
     }
+    else if(!def) {
+        return (
+            <>
+                <fieldset>
+                    <legend>Status:</legend>
+                    <select value={status} onChange={handleChange} name={"status"}>
+                        <option value={""}>-- Choose a Status --</option>
+                        <option value={"IDEA"}>IDEA</option>
+                        <option value={"DESIGN"}>DESIGN</option>
+                        <option value={"WIP"}>WIP</option>
+                        <option value={"FINISHED"}>FINISHED</option>
+                        <option value={"ARCHIVED"}>ARCHIVED</option>
+                    </select>
+                </fieldset>
+            </>
+        )
+    }
     else {
         return (
             <>
                 <fieldset>
                     <legend>Status:</legend>
                     <select value={status} onChange={handleChange} name={"status"}>
-                        <option value={"IDEA"}>-- Choose a Status --</option>
-                        <option value={"IDEA"}>IDEA</option>
-                        <option value={"DESIGN"}>DESIGN</option>
-                        <option value={"WIP"}>WIP</option>
-                        <option value={"FINISHED"}>FINISHED</option>
-                        <option value={"ARCHIVED"}>ARCHIVED</option>
+                        {stats.map( s => {return <option key={s} value={s}>{s}</option>})}
                     </select>
                 </fieldset>
             </>

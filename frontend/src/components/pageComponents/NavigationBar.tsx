@@ -9,7 +9,6 @@ export function NavigationBar(){
     const navigate = useNavigate();
     function handleClick(event){
         logout();
-        navigate('/');
     }
     return (
         <>

@@ -1,5 +1,5 @@
-import {useAuth} from "../util/context/AuthContext.tsx";
-import {AuthExpiredError} from "../util/errors/AuthExpiredError.ts";
+import {useAuth} from "../../util/context/AuthContext.tsx";
+import {AuthExpiredError} from "../../util/errors/AuthExpiredError.ts";
 import {
     Button,
     type ButtonHandle,
@@ -7,14 +7,14 @@ import {
     BigTextbox,
     SmallTextbox,
     DropDown
-} from "../components/ui";
+} from "../../components/ui";
 import {useRef} from "react";
-import  '../components/ui/Links.css';
-import {Card} from "../components/ui/Card.tsx";
+import  '../../components/ui/Links.css';
+import {Card} from "../../components/ui/Card.tsx";
 import {Link} from "react-router-dom";
-import {Linki} from "../components/ui/Linki.tsx";
-import {Lists} from "../components/ui/Lists.tsx";
-import type {minEntity} from "../util/formatting.ts";
+import {Linki} from "../../components/ui/Linki.tsx";
+import {Lists} from "../../components/ui/Lists.tsx";
+import type {minEntity} from "../../util/formatting.ts";
 import type {projectDTO} from "@fullstack-lab/utils";
 const daTa: Required<projectDTO> = {
     title: "Weather Dashboard",

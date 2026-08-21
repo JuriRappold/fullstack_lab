@@ -8,6 +8,7 @@ import {query} from "./project.query.js";
 import {minimalProject, partialProjectDTO, projectDTO,} from '@fullstack-lab/utils'
 import {format,} from './project.utils.js'
 import {ProjectDocument} from "../database/index.js";
+import {ObjectId} from "mongodb";
 
 
 /*
@@ -58,7 +59,7 @@ export const delProjectId = async (projectId: string, userId: string): Promise<b
 }
 
 export const updateProById = async (projectId: string, newData: partialProjectDTO, userId: string) => {
-    const result = await query.update.updateProject(projectId, newData, userId);
+    const result = await query.update.updateProject(new ObjectId(projectId), format.updateToData(newData), new ObjectId(userId));
     return result ? format.DocumentToDTO(result) : result;
 }
 

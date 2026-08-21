@@ -4,9 +4,11 @@
     display: grid;
     grid-template-columns: 1fr 2fr;
     justify-content: space-evenly;
+    gap: 2rem;
 
     aside {
         border: 5px solid black;
+        padding: 1rem;
         /*border-right: 5px solid black;*/
         /*display: grid;*/
         /*grid-template-columns: 1fr;*/
@@ -15,6 +17,7 @@
     main {
         /*border-left: 5px solid black;*/
         border: 5px solid black;
+        margin: 0;
         /*display: grid;*/
         /*grid-template-columns: 1fr;*/
 
