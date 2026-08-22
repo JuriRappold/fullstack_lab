@@ -23,7 +23,7 @@ import {
     LogIn,
     Register,
     Home,
-    EditProject
+    EditProject, SearchPage
 } from "./pages";
 
 function AppRoutes(){
@@ -60,6 +60,9 @@ function AppRoutes(){
             <Route path={"/user/:userId"} element={
               <PageWrapper children={ <User />} />
             }/>
+              <Route path={"/search"} element={
+                  <PageWrapper children={<SearchPage/>} />
+              } />
           </Routes>
       </>
   )

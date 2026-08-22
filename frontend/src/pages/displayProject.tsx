@@ -3,12 +3,11 @@ import {useEffect, useState} from "react";
 import {Button, Linki, Lists} from '../components';
 import {
     getProjectById,
-    getProjectsByUser
 } from '../util/apiCalls/project.Call.ts'
 import {type STATUS} from "@fullstack-lab/utils";
 
-import type {minimalUpdate, projectDTO, responseError, updateDTO} from "@fullstack-lab/utils";
-import {Link, useParams} from "react-router-dom";
+import type { projectDTO, responseError, updateDTO} from "@fullstack-lab/utils";
+import {useNavigate, useParams} from "react-router-dom";
 
 import {useAuth} from "../util/context/AuthContext.tsx";
 import {getUpdatesOfProject} from "../util/apiCalls/update.Calls.ts";
@@ -17,9 +16,10 @@ export function DisplayProject(){
     const {token} = useAuth();
     const {projectId} = useParams();
     const [loading, setLoading] = useState(true)
-    const [project, setProject] = useState<projectDTO>();
-    const [updates, setUpdates] = useState<updateDTO[]>();
+    const [project, setProject] = useState<projectDTO>({contributors: [], description: "", id: "", owner: {id: "", username: ""}, status: "IDEA", title: ""});
+    const [updates, setUpdates] = useState<updateDTO[]>([]);
     const [error, setError] = useState<responseError | Error>();
+    const navigate = useNavigate();
 
     function whichColor(status: STATUS){
         switch(status) {
@@ -37,23 +37,61 @@ export function DisplayProject(){
     }
 
     useEffect(() => {
-        async function loadProjectById() {
-            if(!token) return;
-            try{
-                const fetchedProject = await getProjectById(projectId, token);
-                setProject(fetchedProject);
+        let cancelled = false;
 
-                const fetchedUpdates = await getUpdatesOfProject(projectId, token);
-                setUpdates(fetchedUpdates);
+        async function loadProjectById() {
+            try{
+                if(!token){
+                    setLoading(false);
+                    navigate('/');
+                    return;
+                }
+                if(!projectId) {
+                    setError(new Error("No projectId Provided", {cause: `No projectId`}));
+                    setLoading(false);
+                    return;
+                }
+                const [fetchedProject, fetchedUpdates] = await Promise.all([
+                    getProjectById(projectId, token),
+                    getUpdatesOfProject(projectId, token)
+                ]);
+                if(cancelled) return;
+                setProject( project => {
+                    if(
+                        JSON.stringify(project) ===
+                        JSON.stringify(fetchedProject)
+                    ){
+                        return project;
+                    }
+                    return fetchedProject;
+                });
+                setUpdates(updates => {
+                    if(
+                        JSON.stringify(updates) ===
+                        JSON.stringify(fetchedUpdates)
+                    ) {
+                        return updates;
+                    }
+                    return fetchedUpdates;
+                });
 
             } catch (err) {
-                setError(err);
+                if(cancelled) return;
+                setError(err instanceof Error ? err : new Error("Failed to fetch the project", {cause: err}));
             } finally {
-                setLoading(false);
+                if(!cancelled) setLoading(false);
             }
         }
-        loadProjectById()
-    }, [projectId, token]);
+        loadProjectById();
+
+        const intervalId = setInterval(loadProjectById, 30_000);
+
+        return () => {
+            cancelled = true;
+            clearInterval(intervalId);
+        };
+    }, [navigate, projectId, token]);
+
     if(loading){
         return (
             <>
@@ -61,6 +99,7 @@ export function DisplayProject(){
             </>
         )
     }
+    else if(error) throw error;
     else {
         if(project && !error && updates) {
             return (
@@ -88,7 +127,6 @@ export function DisplayProject(){
                 </>
             )
         }
-        else if(error) throw error;
         else throw new Error("Data is null", {cause: `${project}`});
     }
 }

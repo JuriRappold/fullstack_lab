@@ -1,8 +1,10 @@
 .editingProject {
     display: grid;
     grid-template:
-    'title title auto'
-    'current new auto ';
+    'title title title'
+    'current new delete ';
+
+    gap: 2rem;
 
     h2 {
         grid-area: title;
@@ -18,11 +20,45 @@
 
         form {
             background-color: var(--bg2);
+            display: grid;
+            grid-template:
+            'title'
+            'description'
+            'description'
+            'status'
+            'button';
 
-            button {
-                align-self: center;
-                justify-self: center;
+            #titleInput {
+                grid-area: title;
             }
+
+            #descriptionInput {
+                grid-area: description;
+            }
+
+            #statusDrop {
+                grid-area: status;
+            }
+
+            .button {
+                grid-area: button;
+                margin-top: .5rem;
+                padding: 1rem;
+                background-color: var(--bg2);
+            }
+        }
+    }
+
+    #deleteDiv {
+        grid-area: delete;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+
+        .button{
+            margin: .5rem;
+            padding: 2rem;
+            background-color: var(--bg3);
         }
     }
 }

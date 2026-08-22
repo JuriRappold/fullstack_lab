@@ -1,17 +1,14 @@
-import {Card} from "../components/ui/Card.tsx";
-import type {minimalUser, projectDTO, updateDTO, userDTO} from "@fullstack-lab/utils";
+// Types
+import type {minimalUser, projectDTO, updateDTO} from "@fullstack-lab/utils";
+// React
 import {useEffect, useState} from "react";
-import {Button} from "../components/ui";
-import {useParams} from "react-router-dom";
-import {getProjectsByUser} from "../util/apiCalls/project.Call.ts";
-import {Lists} from "../components";
+import {useNavigate, useParams} from "react-router-dom";
 import {useAuth} from "../util/context/AuthContext.tsx";
+// UI
+import {Lists, Button} from "../components";
+// API Calls
 import {getFullUserById} from "../util/apiCalls/user.Call.ts";
-// const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsaWNlIiwiaWQiOiI2YTdmMTI5YzAzYWQ1NWE0NjJhNjY3ZDciLCJpYXQiOjE3ODcwNzE0MTQsImV4cCI6MTc4NzY3NjIxNH0.ArDXCo1Wf6mnF0AZ-Rmk846kfx_x4jK7idvzc-2Q7cY"
-// const user = {
-//     username: "bob",
-//     id: "6a7f129c03ad55a462a667d8"
-// }
+
 
 export function User(){
     const [fetchedProjects, setFetchedProjects] = useState<projectDTO[]>();
@@ -20,28 +17,71 @@ export function User(){
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null)
+    const navigate = useNavigate();
 
     const {userId} = useParams();
     const {token, user} = useAuth();
     useEffect(() => {
+        let cancelled = false;
         async function load() {
+            if(!user || !token){
+                setLoading(false);
+                navigate('/');
+                return;
+            }
+            if(!userId){
+                setError(new Error("No userId Provided", {cause: `No userId`}));
+                setLoading(false);
+                return;
+            }
             try{
-                console.log("Parameter: " + userId);
-                console.log("Auth Id: " + user.id);
                 const response =  await getFullUserById(userId, token);
-                setFetchedUser({id: response.id, username: response.username});
-                setFetchedUpdates(response.updates);
-                setFetchedProjects(response.projects);
+                const responseUser = {id: response.id, username: response.username};
+                if(cancelled) return;
+                setFetchedUser( fetchedUser => {
+                    if(
+                        JSON.stringify(fetchedUser) ===
+                        JSON.stringify(responseUser)
+                    ) {
+                        return fetchedUser;
+                    }
+                    return responseUser;
+                });
+                setFetchedUpdates(fetchedUpdates => {
+                    if(
+                        JSON.stringify(fetchedUpdates) ===
+                        JSON.stringify(response.updates)
+                    ){
+                        return fetchedUpdates;
+                    }
+                    return response.updates;
+                });
+                setFetchedProjects( fetchedProjects => {
+                    if(
+                        JSON.stringify(fetchedProjects) ===
+                        JSON.stringify(response.projects)
+                    ){
+                        return fetchedProjects;
+                    }
+                    return response.projects;
+                });
 
 
             } catch (e) {
-                setError(e)
+                if(cancelled) return;
+                setError(e instanceof Error ? e : new Error("Failed to fetch the project", {cause: e}));
             } finally {
-                setLoading(false)
+                if(!cancelled) setLoading(false);
             }
         }
-        load()
-    }, [token, user.id, userId]);
+        load();
+
+        const intervalId = setInterval(load, 30_000);
+        return () => {
+            cancelled = true;
+            clearInterval(intervalId);
+        }
+    }, [navigate, token, user, userId]);
 
     if(loading){
         return (
@@ -51,7 +91,7 @@ export function User(){
             </>
         )
     }
-    if(error) throw new Error(error.message);
+    if(error) throw error;
     if(fetchedUser && fetchedProjects && fetchedUpdates) {
         return (
             <>

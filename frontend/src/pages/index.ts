@@ -9,3 +9,4 @@ export {Register} from './Register.tsx';
 export {CreateUpdate} from'./CreateUpdate.tsx';
 export {CreateProject} from './CreateProject.tsx';
 export {EditProject} from './EditProject.tsx';
+export {SearchPage} from './SearchPage.tsx';

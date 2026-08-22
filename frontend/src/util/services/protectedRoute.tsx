@@ -22,12 +22,11 @@ export function ProtectedRoute( {children}) {
     if(!isAuthenticated){
         return (
             <Navigate
-                to="/login"
+                to="/"
                 replace
                 state={{from: location}}
             />
         )
-        // navigate("/login", { replace: true, state: {from: location}})
     }
     return children;
 }

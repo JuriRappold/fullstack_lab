@@ -55,7 +55,7 @@ export const getProjectFrom = async (userId: string): Promise<projectDTO[]> => {
 
 export const delProjectId = async (projectId: string, userId: string): Promise<boolean> => {
     const result = await query.delete.deleteById(projectId, userId);
-    return result.acknowledged;
+    return result.deletedCount === 1;
 }
 
 export const updateProById = async (projectId: string, newData: partialProjectDTO, userId: string) => {

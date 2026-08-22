@@ -16,7 +16,6 @@ import {
     type full_user,
     type halfUser
 } from '../types/'
-import {MyError} from "../errors";
 // KEYS
 const TOKEN_KEY = 'lab_token';
 
@@ -95,7 +94,7 @@ export default function AuthProvider( {children}: {children: ReactNode} ){
                     username: user.username,
                     id: user.id ?? ""
                 } satisfies halfUser;
-                if (!us.id)  throw new MyError(`Something went wrong during authentication`, 'No Id', 'login');
+                if (!us.id)  throw new Error(`Something went wrong during authentication`, {cause: 'No Id'});
                 setToken(savedToken);
                 setUser(us);
             })

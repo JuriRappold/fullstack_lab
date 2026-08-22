@@ -20,7 +20,14 @@ import {ObjectId} from "mongodb";
 	- returns 409 if project title not unique
 */
 async function newProject(newProject: ProjectData): Promise<ProjectDocument> {
-    return (await (await ProjectModel.create(newProject)).populate('owner_id', '_id username')).populate('contributors', '_id username');
+    // console.log(newProject)
+    //@ts-ignore
+    // return ProjectModel.create(newProject);
+    const newPro = await ProjectModel.create(newProject);
+
+    await newPro.populate([{path: "owner_id", select: "username id"}, {path: "contributors", select: "username id"}]);
+    // console.log(newPro);
+    return newPro;
 }
 
 
@@ -83,7 +90,7 @@ async function updateProject(projectId: ObjectId, newData: Partial<ProjectData>,
 	* : Promise<number>
  */
 async function deleteById(projectId: string, userId: string) {
-    return ProjectModel.deleteOne({id: projectId, $or: [{owner_id: userId}, {contributors: userId}]}).populate('owner_id', 'id username').populate('contributors', 'id username');
+    return ProjectModel.deleteOne({_id: new ObjectId(projectId), owner_id: new ObjectId(userId)});//.populate('owner_id', 'id username').populate('contributors', 'id username');
 }
 // async function checkProjectOwnerShip(projectId: string, userId: string) {
 //     const project = await ProjectModel.findById(projectId);

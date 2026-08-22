@@ -42,6 +42,7 @@ export const createNewProject = asyncHandler( async (
 ) => {
     const { data } = req.body
     if (!data) throw ApiError.badRequest(`No new data to create new project: ${data}`);
+    // console.log(data);
     // const newData = {
     //     ...data,
     //     owner: {id: req.user.id, username: req.user.username},
@@ -127,20 +128,18 @@ export const getAllProjects = asyncHandler( async (
 
 
 export const deleteProjectById = asyncHandler( async(
-    req: Request< {id: string}, responseBody<null>, never >,
-    res: Response<responseBody<null>>
+    req: Request< {id: string}, responseBody<boolean>, never >,
+    res: Response<responseBody<boolean>>
 ) => {
     const projectId = req.params.id;
     if(!isUUID.test(projectId)) throw ApiError.badRequest(`Invalid UUID: ${projectId}`);
-
     const deleted = await delProjectId(projectId, req.user.id);
-
     if(!deleted) throw ApiError.internal(`Failed to delete ${projectId}`);
 
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,
-        data: null
+        data: deleted
     })
     return;
 })

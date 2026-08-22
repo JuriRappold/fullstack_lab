@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
-import {ApiError, httpUnauthorized, type responseError} from "@fullstack-lab/utils";
+import {ApiError, httpConflict, httpUnauthorized, type responseError} from "@fullstack-lab/utils";
 import {JsonWebTokenError} from "jsonwebtoken";
+import {MongoError} from "mongodb";
 
 /**
  * Global error handler middleware.
@@ -29,11 +30,22 @@ export function errorHandler(
         }satisfies responseError)
         return;
     }
+    if(err instanceof MongoError){
+ if(err.code === 11000) {
+             res.status(httpConflict.status).json({
+                 error: `Duplicate Key`,
+                 statusCode: httpConflict.status
+             } satisfies responseError)
+             return;
+        }
+        res.status(500).json({err,type: typeof err});
+        return;
+    }
 
     // Unexpected error — log and return generic 500
     console.error('Unhandled error:', err);
     res.status(500).json({
-        error: 'Internal server error',
+        error: 'Internal server error: ' + JSON.stringify(err),
         statusCode: 500,
     } satisfies responseError);
 }
