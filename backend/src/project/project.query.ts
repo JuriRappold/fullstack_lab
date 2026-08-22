@@ -20,7 +20,14 @@ import {ObjectId} from "mongodb";
 	- returns 409 if project title not unique
 */
 async function newProject(newProject: ProjectData): Promise<ProjectDocument> {
-    return (await (await ProjectModel.create(newProject)).populate('owner_id', '_id username')).populate('contributors', '_id username');
+    // console.log(newProject)
+    //@ts-ignore
+    // return ProjectModel.create(newProject);
+    const newPro = await ProjectModel.create(newProject);
+
+    await newPro.populate([{path: "owner_id", select: "username id"}, {path: "contributors", select: "username id"}]);
+    // console.log(newPro);
+    return newPro;
 }
 
 

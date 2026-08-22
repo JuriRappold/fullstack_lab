@@ -1,5 +1,5 @@
 import './search.css';
-import {use, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {getAllProjects} from "../util/apiCalls/project.Call.ts";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../util/context/AuthContext.tsx";

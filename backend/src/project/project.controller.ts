@@ -42,6 +42,7 @@ export const createNewProject = asyncHandler( async (
 ) => {
     const { data } = req.body
     if (!data) throw ApiError.badRequest(`No new data to create new project: ${data}`);
+    // console.log(data);
     // const newData = {
     //     ...data,
     //     owner: {id: req.user.id, username: req.user.username},

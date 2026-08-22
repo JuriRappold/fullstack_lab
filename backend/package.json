@@ -11,7 +11,8 @@
     "start": "node --env-file=.env dist/server.js",
     "dev": "tsx watch --env-file=.env src/server.ts",
     "lint": "eslint .",
-    "seed": "tsx --env-file=.env src/database/seed.ts"
+    "seed": "tsx --env-file=.env src/database/seed.ts",
+    "setup": "npm install && npm run seed"
   },
   "author": "",
   "license": "ISC",

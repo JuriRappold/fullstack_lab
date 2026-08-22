@@ -1,8 +1,4 @@
-import {
-    ObjectId,
-    ProjectData,
-    ProjectDocument,
-} from "../database/index.js";
+import {ObjectId, ProjectData, ProjectDocument,} from "../database/index.js";
 import {minimalProject, partialProjectDTO, projectDTO} from "@fullstack-lab/utils";
 
 // const none = "NONE";
@@ -26,9 +22,9 @@ const DTOToData = (proDTO: projectDTO): ProjectData => {
         title: proDTO.title,
         status: proDTO.status,
         owner_id: new ObjectId(proDTO.owner.id),
-        contributors: proDTO.contributors.map( el => new ObjectId(el.id)),
+        contributors: proDTO.contributors.map(el => new ObjectId(el.id)),
         description: proDTO.description
-    } satisfies ProjectData
+    } satisfies ProjectData;
 }
 
 const updateToData = (proDTO: partialProjectDTO): Partial<ProjectData> => {
