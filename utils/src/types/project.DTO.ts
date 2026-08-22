@@ -37,7 +37,7 @@ export type projectDTO = {
     readonly  id?: string
 }
 export type partialProjectDTO = Partial<projectDTO>;
-export type minimalProject = Required<Pick<projectDTO, 'title' | 'id'>> // add status?
+export type minimalProject = Required<Pick<projectDTO, 'title' | 'id' | 'status'>> // add status?
 
 export function isProjectDTO(value: unknown): value is projectDTO {
     if (typeof value !== "object" || value === null) {
@@ -49,7 +49,7 @@ export function isProjectDTO(value: unknown): value is projectDTO {
     return (
         typeof obj.title === "string" &&
         typeof obj.description === "string" &&
-        isStatus(obj.status) &&
+        Object.hasOwn(obj, "status") && isStatus(obj.status) &&
         isMinimalUser(obj.owner) &&
         isMinimalUserArray(obj.contributors) &&
         (obj._id === undefined || typeof obj._id === "string")
@@ -80,12 +80,16 @@ export function isMinimalProject(value: unknown): value is minimalProject {
     const obj = value as Record<string, unknown>;
 
     return (
+        Object.hasOwn(obj, "title") &&
         typeof obj.title === "string" &&
-        typeof obj.id === "string"
+        Object.hasOwn(obj, "id") &&
+        typeof obj.id === "string" &&
+        Object.hasOwn(obj, "status") &&
+        isStatus(obj.status)
     );
 }
 export function isOptionalMinimalProject(value: unknown): boolean {
-    return typeof value === "string" || isMinimalProject(value);
+    return typeof value === "undefined" || isMinimalProject(value);
 }
 
 export function isMinimalProjectArray(value: unknown): value is minimalProject[] {

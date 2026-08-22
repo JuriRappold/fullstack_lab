@@ -15,7 +15,14 @@ export function isResponseError(value: unknown): value is responseError {
     }
 
     const obj = value as Record<string, unknown>;
-    return ( typeof obj.error === "string" && typeof obj.statusCode === "number" );
+
+    const validKeys = ["error", "statusCode"];
+    const keysOfvalue = Object.keys(obj);
+    const props = keysOfvalue.filter( k => validKeys.includes(k));
+    if(props.length !== 2) return false;
+    return (
+        typeof obj.error === "string" &&
+        typeof obj.statusCode === "number" );
     // const isBody = (typeof obj.status === "number" && typeof obj.message ==="string" && Object.hasOwn(obj, "data"));
     // if (isError && !isBody) return isError;
 }

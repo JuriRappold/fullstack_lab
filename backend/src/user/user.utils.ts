@@ -1,7 +1,7 @@
 import {UserData, UserDocument} from "../database/index.js";
 import {userDTO} from "@fullstack-lab/utils";
 
-const DocumentToDTO = (userDoc: UserDocument, token: string = '') => {
+const DocumentToDTO = (userDoc: UserDocument, token: string = ''): userDTO => {
     if(!token){
         return {
             username: userDoc.username,

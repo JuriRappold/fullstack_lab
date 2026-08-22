@@ -9,6 +9,7 @@ import {
 import {
     type partialProjectDTO,
 } from '@fullstack-lab/utils';
+import {ObjectId} from "mongodb";
 
 /*
 **CREATE**
@@ -45,15 +46,12 @@ async function projectsFrom(userId: string): Promise< ProjectDocument[] > {
 
 async function projectsByIds(projectIds: string[], userId: string): Promise<ProjectDocument[]> {
     //@ts-ignore
-    return ProjectModel.find({
-            id: projectIds,
-            $or: [
-                {owner_id: userId},
-                {contributors: userId}
-            ]
-    }).populate('owner_id', 'id username').populate('contributors', 'id username');
+    return ProjectModel.find({id: projectIds}).populate('owner_id', 'id username').populate('contributors', 'id username');
 }
-
+async function allProjects(): Promise<ProjectDocument[]>{
+    //@ts-ignore
+    return ProjectModel.find({}).select('id title status')
+}
 /*
 **UPDATE**
 - PATCH `/api/projects/:id`
@@ -62,7 +60,7 @@ async function projectsByIds(projectIds: string[], userId: string): Promise<Proj
 	- returns 400 if no/insufficient req. body
 	- returns 400 if invalid id
  */
-async function updateProject(projectId: string, newData: partialProjectDTO, userId: string): Promise< ProjectDocument | null > {//: Promise< ProjectDocument >
+async function updateProject(projectId: ObjectId, newData: Partial<ProjectData>, userId: ObjectId): Promise< ProjectDocument | null > {//: Promise< ProjectDocument >
     // if( await checkProjectOwnerShip(projectId, userId) ){
     //     const result = await ProjectModel.updateOne({_id: projectId}, newData);
     //     if(result.acknowledged){
@@ -71,7 +69,7 @@ async function updateProject(projectId: string, newData: partialProjectDTO, user
     //     else return null;
     // }
     //@ts-ignore
-    return ProjectModel.updateOne({id: projectId, $or: [{owner_id: userId}, {contributors: userId}]}, newData).populate('owner_id', 'id username').populate('contributors', 'id username');
+    return ProjectModel.findOneAndUpdate({_id: projectId, $or: [{owner_id: userId}, {contributors: userId}]}, newData, {returnDocument: 'after'}).populate('owner_id', 'id username').populate('contributors', 'id username');
 }
 
 
@@ -101,7 +99,8 @@ export const query = {
     read: {
         projectById,
         projectsFrom,
-        projectsByIds
+        projectsByIds,
+        allProjects,
     },
     update: {
         updateProject

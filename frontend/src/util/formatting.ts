@@ -14,6 +14,8 @@ export type minEntity = {id: string,
     status?: STATUS
 }
 export function miniToEntity(enti: userDTO | projectDTO | updateDTO): minEntity {
+    // console.log(enti);
+    // console.log(isUpdateDTO(enti));
     if(isUserDTO(enti)){
         return {
             id: enti.id ?? "",

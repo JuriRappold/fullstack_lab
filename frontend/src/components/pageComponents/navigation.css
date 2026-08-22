@@ -1,0 +1,24 @@
+/* Navigation Header */
+.header{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+    margin-bottom: 2rem;
+    background-color: var(--bg_header);
+    position: sticky;
+    top: 0;
+    color: var(--brand);
+}
+
+.navigation ul{
+    list-style: none;
+    display: flex;
+}
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin: 2rem;
+}
+

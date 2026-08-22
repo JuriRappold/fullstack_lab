@@ -7,6 +7,8 @@ import {
     type fetchProps
 } from '../types';
 import {MyError, type normalError} from "../errors";
+import type {updateDTO} from "@fullstack-lab/utils";
+import {ApiResponseError} from "../errors/ApiResponseError.ts";
 
 type updateProps = fetchProps & {
     updateId?: string,
@@ -61,36 +63,36 @@ function getFetchObject({ method, token, updateId, userId, requestData, projectI
     return fetchObject;
 }
 
-export async function createUpdate(token: string, projectId: string, requestData: object){
+export async function createUpdate(projectId: string, requestData: object, token: string): Promise<updateDTO>{
     const obj = getFetchObject({method: "POST", token, projectId, requestData});
     const response = await fetch(obj.url, obj.requestObj);
-    if(!response.ok) throw new Error("Failed to fetch Update");
     const json = await response.json();
+    if(!response.ok) throw new ApiResponseError(json);
     if(Array.isArray(json.data)) json.data = json.data[0]
     return json.data;
 }
 
-export async function getUpdatesOfProject(token: string, projectId: string){
+export async function getUpdatesOfProject(projectId: string, token: string): Promise<updateDTO[]>{
     const obj = getFetchObject({method: "GET", token, projectId});
     const response = await fetch(obj.url, obj.requestObj);
-    if(!response.ok) throw new Error("Failed to fetch Update");
     const json = await response.json();
+    if(!response.ok) throw new ApiResponseError(json);
     return json.data;
 }
 
-export async function getUpdatesOfUser(token: string, userId: string){
+export async function getUpdatesOfUser(userId: string, token: string){
     const obj = getFetchObject({method: "GET", token, userId});
     const response = await fetch(obj.url, obj.requestObj);
-    if(!response.ok) throw new Error("Failed to fetch Update");
     const json = await response.json();
+    if(!response.ok) throw new ApiResponseError(json);
     return json.data;
 }
 
-export async function getUpdateById(token: string, updateId: string){
+export async function getUpdateById(updateId: string, token: string): Promise<updateDTO>{
     const obj = getFetchObject({method: "GET", token, updateId});
     const response = await fetch(obj.url, obj.requestObj);
-    if(!response.ok) throw new Error("Failed to fetch Update");
     const json = await response.json();
+    if(!response.ok) throw new ApiResponseError(json);
     if(Array.isArray(json.data)) json.data = json.data[0]
     return json.data;
 }

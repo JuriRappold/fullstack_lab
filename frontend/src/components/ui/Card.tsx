@@ -2,7 +2,7 @@ import './card.css';
 import {Link} from "react-router-dom";
 import type {minEntity} from "../../util/formatting.ts";
 export function Card({data}: {data: minEntity}){
-    const hasStatus = data.status !== null;
+    const hasStatus = data.type === "projects"
     return (
         <>
             <Link id={data.id} className={"card"} to={`/${data.type}/${data.id}`} >

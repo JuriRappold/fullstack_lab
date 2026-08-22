@@ -7,11 +7,12 @@ import {
     type fetchProps
 } from '../types';
 import {MyError, type normalError} from "../errors";
-import type {projectDTO, responseError} from "@fullstack-lab/utils";
+import type {minimalProject, partialProjectDTO, projectDTO} from "@fullstack-lab/utils";
+import {ApiResponseError} from "../errors/ApiResponseError.ts";
 type callProjectProps = fetchProps & {
     projectId?: string,
     userId?: string,
-    requestData?: object
+    requestData?: projectDTO | partialProjectDTO
 }
 function getFetchObject({ method, token, projectId, userId, requestData}: callProjectProps): fetchObj{
     let fetchObject: fetchObj;
@@ -35,9 +36,17 @@ function getFetchObject({ method, token, projectId, userId, requestData}: callPr
                     url: `${projectURL}/user/${userId}`
                 }
             }
-            else fetchObject = {
-                requestObj: RequestObject.GET(true, token),
-                url: `${projectURL}/${projectId}`
+            else if(projectId){
+                fetchObject = {
+                    requestObj: RequestObject.GET(true, token),
+                    url: `${projectURL}/${projectId}`
+                }
+            }
+            else {
+                fetchObject = {
+                    requestObj: RequestObject.GET(true, token),
+                    url: `${projectURL}/update/all`
+                }
             }
             break;
         case "POST":
@@ -51,11 +60,11 @@ function getFetchObject({ method, token, projectId, userId, requestData}: callPr
     return fetchObject;
 }
 
-export async function getProjectById(projectId: string, toke: string): Promise<projectDTO| responseError>{
+export async function getProjectById(projectId: string, toke: string): Promise<projectDTO>{
     const obj = getFetchObject({method: "GET", token: toke, projectId});
     const response = await fetch(obj.url, obj.requestObj);
     const json = await response.json();
-    if(!response.ok) return json;
+    if(!response.ok) throw new ApiResponseError(json);
     if(Array.isArray(json.data)) json.data = json.data[0]
     return json.data;
 }
@@ -64,33 +73,44 @@ export async function getProjectsByUser(userId: string, toke: string): Promise<p
     const obj = getFetchObject({method: "GET", token: toke, userId});
     const response = await fetch(obj.url, obj.requestObj);
     const json = await response.json();
-    if(!response.ok) throw new Error(JSON.stringify(json));
+    if(!response.ok) throw new ApiResponseError(json);
     return json.data;
 }
 
-export async function createProject(toke: string, requestData: object){
+export async function createProject(toke: string, requestData: object): Promise<projectDTO> {
     const obj = getFetchObject({method: "POST", token: toke, requestData});
     const response = await fetch(obj.url, obj.requestObj);
-    if(!response.ok) throw new Error("Failed to fetch Project");
     const json = await response.json();
+    if(!response.ok) throw new ApiResponseError(json);
     if(Array.isArray(json.data)) json.data = json.data[0]
     return json.data;
 }
 
-export async function updateProject(toke: string, requestData: object) {
-    const obj = getFetchObject({method: "PATCH", token: toke, requestData});
+export async function updateProject(toke: string, requestData: object, projectId: string): Promise<projectDTO>  {
+    const obj = getFetchObject({method: "PATCH", token: toke, requestData, projectId});
+    console.log(obj);
     const response = await fetch(obj.url, obj.requestObj);
-    if(!response.ok) throw new Error("Failed to fetch Project");
     const json = await response.json();
+    if(!response.ok) throw new ApiResponseError(json);
     if(Array.isArray(json.data)) json.data = json.data[0]
     return json.data;
 }
 
-export async function deleteProject(toke: string, projectId: string) {
+export async function deleteProject(toke: string, projectId: string): Promise<boolean> {
     const obj = getFetchObject({method: "DELETE", token: toke, projectId});
     const response = await fetch(obj.url, obj.requestObj);
-    if(!response.ok) throw new Error("Failed to fetch Project");
     const json = await response.json();
+    if(!response.ok) throw new ApiResponseError(json);
     if(Array.isArray(json.data)) json.data = json.data[0]
+    return true;
+}
+
+export async function getAllProjects(token: string): Promise<minimalProject[]> {
+    const obj = getFetchObject({method: "GET",token})
+    const response = await fetch(obj.url, obj.requestObj);
+
+    const json = await response.json();
+    if(!response.ok) throw new ApiResponseError(json);
     return json.data;
 }
+

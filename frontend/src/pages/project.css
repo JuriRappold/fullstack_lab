@@ -1,0 +1,10 @@
+#ownerAndStatus {
+    span {
+        font-size: 1.5rem;
+    }
+}
+.hero {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+}

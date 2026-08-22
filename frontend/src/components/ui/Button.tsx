@@ -3,9 +3,10 @@ import { useImperativeHandle, useState } from "react";
 import { Link } from "react-router-dom";
 type ButtonProp = {
     text?: string,
-    onPush?: toObject
+    onPush?: toObject | string
     disable?: boolean,
-    ref?: React.RefObject<ButtonHandle | null>
+    ref?: React.RefObject<ButtonHandle | null>,
+    ID?: string
 }
 
 import type{
@@ -17,13 +18,13 @@ export type ButtonHandle = {
     disableButton: () => void;
 };
 
-export const Button = ({ ref, text, onPush, disable }: ButtonProp ) => {
+export const Button = ({ ref, text, onPush, disable, ID }: ButtonProp ) => {
         const [disabled, setDisabled] = useState<boolean>(disable ?? false);
 
         const [classes, setClasses] = useState<string[]>( disabled ? ["button", "disabled"] : ["button"] );
 
         const [myText] = useState(text ?? "Button");
-        const [myPush] = useState(onPush ?? { pathname: "/" });
+        const [myPush] = useState(onPush ?? { pathname: "/home" });
 
         function addClass(newClass: string) {
             setClasses(prevClasses => {
@@ -57,14 +58,14 @@ export const Button = ({ ref, text, onPush, disable }: ButtonProp ) => {
 
         if (disabled) {
             return (
-                <Link className={classes.join(" ") } to="">
+                <Link className={classes.join(" ") } id={ID} to="">
                     {myText}
                 </Link>
             );
         }
 
         return (
-            <Link className={classes.join(" ")} to={myPush} replace={true}>
+            <Link className={classes.join(" ")} to={myPush} replace={true} id={ID}>
                 {myText}
             </Link>
         );

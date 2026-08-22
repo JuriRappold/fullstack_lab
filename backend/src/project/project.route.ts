@@ -11,7 +11,7 @@ import {
     getProjectsOfUser,
     createNewProject,
     deleteProjectById,
-    updateProjectById
+    updateProjectById, getAllProjects
 } from './project.controller.js'
 import {authMiddleware} from "../middleware/authentication.js";
 
@@ -47,6 +47,7 @@ router.post('/create', createNewProject)
  */
 router.get('/:id', getProjectById);
 router.get('/user/:userId', getProjectsOfUser);
+router.get('/update/all', getAllProjects);
 
 /*
 **UPDATE**

@@ -24,4 +24,4 @@ router.get('/project/:projectId', checkID, readUpdatesOfProject);
 
 router.get('/update/:updateId', checkID, readUpdateById);
 
-router.get('/user/', readUpdatesOfUser);
+router.get('/user/:userId', readUpdatesOfUser);

@@ -12,14 +12,21 @@ import {
     httpOK,
     isPartialProjectDTO,
     isProjectDTO,
-    isUUID,
+    isUUID, minimalProject,
     partialProjectDTO,
     projectDTO,
     requestBody,
     responseBody,
 } from "@fullstack-lab/utils";
 import {Request, Response} from 'express';
-import {createProject, delProjectId, getProjectBy, getProjectFrom, updateProById} from './project.model.js'
+import {
+    createProject,
+    delProjectId,
+    getAllMinimalProjects,
+    getProjectBy,
+    getProjectFrom,
+    updateProById
+} from './project.model.js'
 
 /*
 **CREATE**
@@ -78,7 +85,7 @@ export const getProjectById = asyncHandler( async (
     //query
     const project = await getProjectBy(projectId, req.user.id)
     if(!project) throw ApiError.notFound(`Project with id ${projectId} was not found`);
-    if(project === -1) throw ApiError.forbidden(`Is not your project!`);
+    // if(project === -1) throw ApiError.forbidden(`Is not your project!`);
     if(Array.isArray(project)) throw ApiError.internal(`Project is an Array...`);
     //send response
     // console.log(project);
@@ -94,7 +101,7 @@ export const getProjectsOfUser = asyncHandler( async (
     req: Request< { userId: string }, responseBody<projectDTO[]>, never >,
     res: Response<responseBody<projectDTO[]>>
 ) => {
-    const userId = req.params.userId === "1" ? req.user.id : req.params.userId;
+    const userId = req.params.userId;
     if(!isUUID.test(userId)) throw ApiError.badRequest(`Invalid UUID: ${userId}`);
 
     const projects: projectDTO[] = await getProjectFrom(userId);
@@ -103,6 +110,19 @@ export const getProjectsOfUser = asyncHandler( async (
         message: httpOK.message,
         data: projects
     } satisfies responseBody<projectDTO[]>)
+})
+
+export const getAllProjects = asyncHandler( async (
+    req: Request<never, responseBody<minimalProject[]>, never>,
+    res: Response< responseBody<minimalProject[]> >
+) => {
+    const projects = await getAllMinimalProjects();
+    if(!projects) throw ApiError.internal("Something went wrong");
+    res.status(httpOK.status).json({
+        status: httpOK.status,
+        message: httpOK.message,
+        data: projects
+    } satisfies responseBody<minimalProject[]>)
 })
 
 
@@ -132,7 +152,7 @@ export const updateProjectById = asyncHandler( async(
     const projectId = req.params.id;
     if(!isUUID.test(projectId)) throw ApiError.badRequest(`Invalid UUID: ${projectId}`);
     const {data} = req.body;
-    if(!data) throw ApiError.badRequest(`Include data`)
+    if(!data) throw ApiError.badRequest(`Include data`);
     if(isPartialProjectDTO(data)) {
         const result = await updateProById(projectId, data, req.user.id);
         if(!result) throw ApiError.notFound();
