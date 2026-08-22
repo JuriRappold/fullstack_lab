@@ -83,7 +83,7 @@ async function updateProject(projectId: ObjectId, newData: Partial<ProjectData>,
 	* : Promise<number>
  */
 async function deleteById(projectId: string, userId: string) {
-    return ProjectModel.deleteOne({id: projectId, $or: [{owner_id: userId}, {contributors: userId}]}).populate('owner_id', 'id username').populate('contributors', 'id username');
+    return ProjectModel.deleteOne({_id: new ObjectId(projectId), owner_id: new ObjectId(userId)});//.populate('owner_id', 'id username').populate('contributors', 'id username');
 }
 // async function checkProjectOwnerShip(projectId: string, userId: string) {
 //     const project = await ProjectModel.findById(projectId);

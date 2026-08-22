@@ -127,20 +127,18 @@ export const getAllProjects = asyncHandler( async (
 
 
 export const deleteProjectById = asyncHandler( async(
-    req: Request< {id: string}, responseBody<null>, never >,
-    res: Response<responseBody<null>>
+    req: Request< {id: string}, responseBody<boolean>, never >,
+    res: Response<responseBody<boolean>>
 ) => {
     const projectId = req.params.id;
     if(!isUUID.test(projectId)) throw ApiError.badRequest(`Invalid UUID: ${projectId}`);
-
     const deleted = await delProjectId(projectId, req.user.id);
-
     if(!deleted) throw ApiError.internal(`Failed to delete ${projectId}`);
 
     res.status(httpOK.status).json({
         status: httpOK.status,
         message: httpOK.message,
-        data: null
+        data: deleted
     })
     return;
 })

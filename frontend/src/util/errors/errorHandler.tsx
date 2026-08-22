@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import {ErrorPage} from "./errorPage.tsx";
 import {MyError} from "./MyError.ts";
+import {useNavigate} from "react-router-dom";
 
 
 
 export function ErrorHandler( { children }: { children: React.ReactNode } ) {
     const [err, setErr] = useState<Error | null>(null);
     function clearError() {
+        console.log('clearError called');
         setErr(null);
     }
     useEffect(() => {
         const handleError = (event: ErrorEvent) => {
-            event.preventDefault();
+            // event.preventDefault();
             console.log("GLOBAL ERROR HANDLER");
             setErr(event.error instanceof Error ? event.error : new Error(event.message));
             // setError(event.error);
@@ -40,6 +42,9 @@ export function ErrorHandler( { children }: { children: React.ReactNode } ) {
         console.log('ErrorHandler error:', err);
     }, [err]);
 
-    if(err) return <ErrorPage error={err} onReset={clearError} />;
+    if(err) {
+        console.log('Rendering ErrorPage with:', { error: err, onReset: clearError });
+        return <ErrorPage error={err} onReset={clearError} />;
+    }
     else return <>{children}</>;
 }

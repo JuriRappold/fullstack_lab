@@ -2,9 +2,13 @@ import './editiingProject.css';
 // React & UI
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {BigTextbox, DropDown, Linki, SmallTextbox} from "../components";
+import {BigTextbox, Button, DropDown, Linki, SmallTextbox} from "../components";
 // API calls
-import {getProjectById, updateProject} from "../util/apiCalls/project.Call.ts";
+import {
+    getProjectById,
+    updateProject,
+    deleteProject
+} from "../util/apiCalls/project.Call.ts";
 import {getUpdatesOfProject} from "../util/apiCalls/update.Calls.ts";
 // Types
 import {useAuth} from "../util/context/AuthContext.tsx";
@@ -101,8 +105,8 @@ export function EditProject(){
 
         const updatedProject: partialProjectDTO = {}
 
-        if(formData.Title.toString() ) updatedProject.title = formData.Title.toString();//project.title !==
-        if(formData.Description.toString() ) updatedProject.description = formData.Description.toString();//project.description !==
+        if(project.title !== formData.Title.toString() ) updatedProject.title = formData.Title.toString();
+        if(project.description !== formData.Description.toString() ) updatedProject.description = formData.Description.toString();
         if(formData.status.toString()  && formData.status.toString() !== project.status ) updatedProject.status = formData.status.toString();//project.status !==
 
         if(Object.keys(updatedProject).length === 0){return;}
@@ -110,6 +114,30 @@ export function EditProject(){
             const response = await updateProject(token, updatedProject, projectId);
             navigate(`/projects/${response.id}`);
         }
+
+    }
+    async function handleDelete(){
+        if(!token){
+            navigate('/');
+            return;
+        }
+        //popUp for confirmation
+        if(window.confirm("Are you sure you want to delete this Project?")){
+            //actually delete
+            const response = await deleteProject(token, projectId);
+
+            //Success PopUp --> navigate '/home'
+            if(response) {
+                const successDia = document.getElementById("deletionSuccess") as HTMLDialogElement;
+                successDia.showModal();
+            }
+            //Failed PopUp  --> navigate '/projects/edit/:projectId'/don't navigate
+            else{
+                const failureDia = document.getElementById("deletionFailure") as HTMLDialogElement;
+                failureDia.showModal();
+            }
+        }
+
 
     }
 
@@ -123,9 +151,9 @@ export function EditProject(){
     else if(!error && project && updates) {
         return (
             <>
-                <div className={"editingProject"}>
+                <section className={"editingProject"}>
                     <h2>Editing: {project.title}</h2>
-                    <div id={"currentProject"}>
+                    <section id={"currentProject"}>
                         <h4>Current Project: </h4>
                         <h5>Title: {project.title}</h5>
                         <p>{project.description}</p>
@@ -147,8 +175,8 @@ export function EditProject(){
                         <ul>
                             {updates.map( u => <li key={u.id}><Linki text={u.title} to={`/update/${u.id}`}/></li> )}
                         </ul>
-                    </div>
-                    <div id={"newProject"}>
+                    </section>
+                    <section id={"newProject"}>
                         <h4>Edit here:</h4>
                         <form onSubmit={handleSubmit}>
                             <SmallTextbox label={"Title"} def={project.title}/>
@@ -157,8 +185,23 @@ export function EditProject(){
                             <button type={"submit"} className={"button"}>Update</button>
                         </form>
                     {/* Add deletion button w/ confirmation   */}
-                    </div>
-                </div>
+                    </section>
+                    <section id={"deleteDiv"}>
+                        <h4>Or Delete the Project: </h4>
+                        <button type={"button"} onClick={handleDelete} className={"button"}>Delete</button>
+                    </section>
+
+                    <dialog id={"deletionSuccess"} onClose={ (e) => { if(e.currentTarget.returnValue === 'close'){ navigate('/home') } }}>
+                        <p>Successfully delete the project {project.title}</p>
+                        <button type={"button"} commandfor={"deletionSuccess"} command={"close"} value={"close"} className={"button"}>Home</button>
+                    </dialog>
+
+                    <dialog id={"deletionFailure"}>
+                        <p>Failed to delete the project {project.title}</p>
+                        <button type={"button"} commandfor={"deletionFailure"} command={"close"} className={"button"}>Return To Editing</button>
+                    </dialog>
+
+                </section>
             </>
         )
     }

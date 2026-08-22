@@ -100,8 +100,10 @@ export async function deleteProject(toke: string, projectId: string): Promise<bo
     const obj = getFetchObject({method: "DELETE", token: toke, projectId});
     const response = await fetch(obj.url, obj.requestObj);
     const json = await response.json();
-    if(!response.ok) throw new ApiResponseError(json);
-    if(Array.isArray(json.data)) json.data = json.data[0]
+    if(!response.ok) {
+        if(json.error === `Failed to delete ${projectId}`) return false;
+        throw new ApiResponseError(json);
+    }
     return true;
 }
 

@@ -46,7 +46,7 @@ export function DropDown({projects, def}: {projects?: minimalProject[], def?: ST
     else {
         return (
             <>
-                <fieldset>
+                <fieldset id={"statusDrop"}>
                     <legend>Status:</legend>
                     <select value={status} onChange={handleChange} name={"status"}>
                         {stats.map( s => {return <option key={s} value={s}>{s}</option>})}
