@@ -1,0 +1,23 @@
+#search {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    .dataResults {
+        .lists .card {
+            padding: 2rem;
+        }
+    }
+}
+.searchInputs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    input {
+        /*border: 1px dashed black;*/
+        padding: 2rem 5rem 2rem 5rem;
+
+        border-radius: .75rem;
+        font-size: 2rem;
+    }
+}

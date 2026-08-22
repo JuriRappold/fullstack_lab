@@ -60,7 +60,7 @@ export function CreateUpdate(){
                 });
             } catch(e){
                 if(cancelled) return;
-                setError(e instanceof Error ? e : new Error("Failed to load Home Page", {cause: e}));
+                setError(e instanceof Error ? e : new Error("Failed to fetch projects", {cause: e}));
             } finally{
                 if(!cancelled) setLoading(false);
             }

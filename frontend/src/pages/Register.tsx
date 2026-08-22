@@ -23,7 +23,7 @@ export function Register(){
             <main className={"main safe pad"} id={"loginMain"}>
                 <form onSubmit={handleSubmit}>
                     <SmallTextbox label={"Username"} isRequired={true}/>
-                    <SmallTextbox label={"Password"} isRequired={true}/>
+                    <SmallTextbox label={"Password"} isRequired={true} isPassword={true}/>
                     <button type={"submit"} className={"button"} id={"loginBtn"} >Register</button>
                 </form>
                 <div id={"toRegister"}>

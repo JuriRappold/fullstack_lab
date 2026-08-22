@@ -24,8 +24,8 @@ export function LogIn(){
             </header>
             <main className={"main safe pad"} id={"loginMain"}>
                 <form onSubmit={handleSubmit}>
-                    <SmallTextbox label={"Username"} isRequired={true}/>
-                    <SmallTextbox label={"Password"} isRequired={true}/>
+                    <SmallTextbox label={"Username"} isRequired={true} def={''}/>
+                    <SmallTextbox label={"Password"} isRequired={true} isPassword={true} def={''}/>
                     <button type={"submit"} className={"button"} id={"loginBtn"} >LogIn</button>
                 </form>
                 {/*<Button text={"Register"} to={{pathname: "/register"}}/>*/}

@@ -1,7 +1,8 @@
 import {
+    isMinimalProject,
     isProjectDTO,
     isUpdateDTO,
-    isUserDTO,
+    isUserDTO, type minimalProject,
     type projectDTO,
     type updateDTO,
     type userDTO
@@ -13,7 +14,7 @@ export type minEntity = {id: string,
     type: string,
     status?: STATUS
 }
-export function miniToEntity(enti: userDTO | projectDTO | updateDTO): minEntity {
+export function miniToEntity(enti: userDTO | projectDTO | updateDTO | minimalProject): minEntity {
     // console.log(enti);
     // console.log(isUpdateDTO(enti));
     if(isUserDTO(enti)){
@@ -36,6 +37,14 @@ export function miniToEntity(enti: userDTO | projectDTO | updateDTO): minEntity 
             id: enti.id ?? "",
             text: enti.title,
             type: "update"
+        } satisfies minEntity
+    }
+    else if (isMinimalProject(enti)){
+        return {
+            id: enti.id,
+            text: enti.title,
+            type: "projects",
+            status: enti.status
         } satisfies minEntity
     }
     else throw new Error("Failed to Format");
