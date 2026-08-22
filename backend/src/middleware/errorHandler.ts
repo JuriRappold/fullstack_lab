@@ -31,12 +31,13 @@ export function errorHandler(
         return;
     }
     if(err instanceof MongoError){
-        // if(err.code === 11000) {
-        //     res.status(httpConflict.status).json({
-        //         error: `Duplicate Key`,
-        //         statusCode: httpConflict.status
-        //     } satisfies responseError)
-        // }
+ if(err.code === 11000) {
+             res.status(httpConflict.status).json({
+                 error: `Duplicate Key`,
+                 statusCode: httpConflict.status
+             } satisfies responseError)
+             return;
+        }
         res.status(500).json({err,type: typeof err});
         return;
     }
