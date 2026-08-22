@@ -1,4 +1,4 @@
-import {Linki, NaviLink} from "../ui";
+import { NaviLink} from "../ui";
 import './navigation.css'
 import '../ui/Links.css'
 import {Link, useNavigate} from "react-router-dom";
@@ -8,6 +8,7 @@ export function NavigationBar(){
     const {logout} = useAuth()
     const navigate = useNavigate();
     function handleClick(event){
+        event.preventDefault(); // idk if i need this here, but as far as i can tell it doesn't hurt
         logout();
     }
     return (

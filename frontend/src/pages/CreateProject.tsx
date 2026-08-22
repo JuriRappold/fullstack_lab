@@ -1,19 +1,25 @@
+// React
 import {useAuth} from "../util/context/AuthContext.tsx";
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
-import type {projectDTO} from "@fullstack-lab/utils";
+// Types
+import type {partialProjectDTO} from "@fullstack-lab/utils";
+// UI
 import {BigTextbox, DropDown, SmallTextbox} from "../components";
+// API Calls
 import {createProject} from "../util/apiCalls/project.Call.ts";
 
 
 export function CreateProject(){
     const {token, user} = useAuth();
     const navigate = useNavigate();
-    // const [project, setProject] = useState<projectDTO>();
 
 
     async function handleSubmit(event) {
         event.preventDefault();
+        if(!token || !user){
+            navigate('/');
+            return;
+        }
         const formData = Object.fromEntries(new FormData(event.currentTarget));
 
         const newProject = {
@@ -22,7 +28,7 @@ export function CreateProject(){
             status: formData.status.toString(),
             owner: {id: user.id, username: user.username},
             contributors: []
-        } satisfies projectDTO
+        } satisfies partialProjectDTO;
         const response = await createProject(token, newProject);
         navigate(`/projects/${response.id}`);
     }

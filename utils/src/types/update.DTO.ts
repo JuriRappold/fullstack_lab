@@ -21,7 +21,10 @@ export type updateDTO = {
     contributor: minimalUser,
     readonly id?: string
 }
-export type partialUpdateDTO = Partial<updateDTO>;
+export type partialUpdateDTO = Omit<Partial<updateDTO>, 'project' | 'contributor'> & {
+    project?: Partial<minimalProject>,
+    contributor?: Partial<minimalUser>
+};
 
 export function isUpdateDTO(value: unknown): value is updateDTO {
     if (typeof value !== "object" || value === null) {

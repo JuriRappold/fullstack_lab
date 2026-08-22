@@ -44,7 +44,6 @@ async function addContributor(projectId: ObjectId, userId: ObjectId) {
  * @param userId
  */
 async function newUpdate(newData: UpdateData, userId: string): Promise<UpdateDocument | null | -1> {
-    console.log(newData);
     const projectId = newData.project_id.toString();
     if( ! (await checkIfAllowed( projectId, userId)) ){
         const result = await addContributor(newData.project_id, new ObjectId(userId));

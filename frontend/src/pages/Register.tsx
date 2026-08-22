@@ -1,16 +1,18 @@
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../util/context/AuthContext.tsx";
-import {SmallTextbox} from "../components/ui";
+import {SmallTextbox} from "../components";
 
 export function Register(){
     const navigate = useNavigate();
     const {register} = useAuth();
+
     async function handleSubmit(event) {//:  React.SubmitEventHandler<HTMLButtonElement>
         event.preventDefault();
         const data = Object.fromEntries(new FormData(event.currentTarget));
         const result = await register(String(data.Username), String(data.Password));
         navigate("/home");
     }
+
     return (
         <>
             <header className={"login"} id={"register"}>
